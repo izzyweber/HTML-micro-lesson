@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML is the new file type</title>
+
+<!-- ===================================================================
+     INVISIBLE CONTEXT  (slide 7 reveals this block live)
+     This JSON is read back out by the "Reveal" button. It is the brief,
+     baked into the file so the next person or the next AI can pick it up
+     cold. Edit it freely.
+     =================================================================== -->
+<script type="application/json" id="lesson-context">
+{
+  "title": "HTML as the new file type",
+  "presenter": "Izzy Weber",
+  "audience": [
+    "A small, senior audience",
+    "One strategy lead and one operations lead"
+  ],
+  "duration_minutes": "15-20",
+  "argument": "A long Markdown, Word or PDF output is a report you read once. The same content as one HTML file is a thing you open, change and pass on. Everyone is converging on this in 2026.",
+  "sources": [
+    "Thariq Shihipar (@trq212), Claude Code lead, 'HTML is the new markdown', about 8M views",
+    "Lenny's Newsletter, How I AI interview, May 2026",
+    "OpenAI Codex 'Sites', 2 June 2026",
+    "The AI Daily Brief (NLW), 'Things You Should Build With AI Instead of Sending Files', 7 June 2026"
+  ]
+}
+</script>
+
+<!-- ===================================================================
+     BRANDING
+     Replace these three hex values with your brand colours and the
+     deck reskins itself.
+     =================================================================== -->
+<style>
+  :root{
+    --brand-accent:#1a3cff;     /* brand primary */
+    --brand-accent-soft:#e7ebff;/* a pale tint of the primary */
+    --brand-ink:#16151a;        /* near-black text */
+
+    --bg:#faf9f6; --surface:#ffffff;
+    --ink:var(--brand-ink); --muted:#6c6b65; --line:#e7e4dc;
+    --accent:var(--brand-accent); --accent-soft:var(--brand-accent-soft);
+    --teal:#0f6e56; --teal-soft:#e1f5ee; --coral:#993c1d; --coral-soft:#faece7;
+    --amber:#854f0b; --amber-soft:#faeeda;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;overflow:hidden}
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;
+    justify-content:center;padding:3.5vh 7vw 74px;animation:fade .3s ease;overflow:auto}
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---- typography: presentation scale, nothing under 18px ---- */
+  .kicker{font-size:clamp(18px,1.7vw,22px);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin:0 0 22px}
+  h1{font-size:clamp(48px,7vw,104px);line-height:1;font-weight:700;margin:0 0 24px;letter-spacing:-.025em;color:var(--accent)}
+  h2{font-size:clamp(34px,4.6vw,64px);line-height:1.05;font-weight:700;margin:0 0 20px;letter-spacing:-.018em}
+  h3{font-size:clamp(22px,2.3vw,30px);font-weight:600;margin:0 0 12px}
+  p,li{font-size:clamp(20px,2vw,28px);line-height:1.45;margin:0 0 16px}
+  .lead{font-size:clamp(26px,3vw,40px);color:var(--muted);line-height:1.25;max-width:24ch;font-weight:500}
+  .muted{color:var(--muted)}
+  .small{font-size:clamp(17px,1.6vw,20px)}
+  ul{margin:8px 0 0;padding-left:1.1em}
+  li{margin-bottom:16px}
+  li::marker{color:var(--accent)}
+  b,strong{font-weight:700}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .cols-2to1{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+  .cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .cols4 .card{padding:18px 20px}
+  .cols4 .card p{font-size:clamp(15px,1.35vw,18px)}
+  .cols4 h3{font-size:clamp(19px,1.9vw,24px)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 28px}
+  .card h3{margin-bottom:10px}
+  .card p{font-size:clamp(18px,1.7vw,22px);margin-bottom:0;color:var(--muted)}
+
+  .tag{display:inline-block;font-size:clamp(15px,1.4vw,18px);font-weight:600;padding:5px 14px;
+    border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-bottom:12px}
+  .tag.teal{background:var(--teal-soft);color:var(--teal)}
+  .tag.coral{background:var(--coral-soft);color:var(--coral)}
+  .tag.amber{background:var(--amber-soft);color:var(--amber)}
+
+  .ask{border-left:5px solid var(--accent);background:var(--accent-soft);
+    border-radius:0 14px 14px 0;padding:20px 24px;margin-top:24px}
+  .ask p{margin:0;font-size:clamp(20px,2vw,26px);color:var(--ink)}
+  .ask .who{font-size:clamp(15px,1.4vw,18px);letter-spacing:.05em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:6px}
+
+  .quote{font-size:clamp(28px,3.4vw,46px);line-height:1.2;font-weight:600;letter-spacing:-.01em;margin:0 0 16px}
+  .quote .by{display:block;font-size:clamp(18px,1.7vw,22px);font-weight:500;color:var(--muted);margin-top:18px}
+
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+  .chip{font-family:var(--mono);font-size:clamp(17px,1.6vw,21px);padding:9px 16px;border-radius:10px;
+    border:1px solid var(--line);background:var(--surface)}
+  .chip b{color:var(--accent)}
+
+  .btn{font:inherit;font-size:clamp(18px,1.8vw,23px);font-weight:600;cursor:pointer;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink);border-radius:12px;padding:14px 22px;transition:.15s;text-decoration:none;display:inline-block}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  code,.mono{font-family:var(--mono)}
+
+  /* ---- hook toggle ---- */
+  .demobox{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;min-height:46vh}
+  .md-view{padding:28px 32px;font-family:var(--sans);font-size:clamp(15px,1.4vw,18px);line-height:1.5;
+    color:#3b3a35;max-height:44vh;overflow:hidden;position:relative}
+  .md-view h4{font-size:clamp(17px,1.6vw,20px);font-weight:700;margin:15px 0 6px;color:var(--ink)}
+  .md-view h4:first-child{margin-top:0}
+  .md-view p{margin:0 0 10px}
+  .md-view::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;
+    background:linear-gradient(transparent,var(--surface))}
+  .if-view{display:none}
+  .if-tabs{display:flex;gap:8px;padding:20px 24px 0}
+  .if-tab{font-size:clamp(17px,1.6vw,21px);font-weight:600;padding:10px 18px;border-radius:10px 10px 0 0;cursor:pointer;color:var(--muted)}
+  .if-tab.on{background:var(--accent-soft);color:var(--accent)}
+  .if-body{padding:22px 26px 30px}
+  .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:6px 0 20px}
+  .metric{background:var(--bg);border-radius:14px;padding:18px}
+  .metric .v{font-size:clamp(30px,3.4vw,46px);font-weight:700}
+  .metric .l{font-size:clamp(16px,1.5vw,19px);color:var(--muted)}
+  .bar{height:14px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px}
+  .bar>span{display:block;height:100%;background:var(--accent)}
+
+  /* ---- calculator (trust slide) ---- */
+  .ctrl{margin-bottom:20px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:clamp(18px,1.7vw,22px);color:var(--muted);margin-bottom:10px}
+  .ctrl label b{color:var(--ink)}
+  input[type=range]{width:100%;accent-color:var(--accent);height:26px}
+  .result{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px}
+  .result .util{font-size:clamp(52px,8vw,96px);font-weight:700;line-height:1}
+  .result .util.over{color:var(--coral)} .result .util.ok{color:var(--teal)}
+  .audit{margin-top:20px;font-family:var(--mono);font-size:clamp(16px,1.5vw,20px);color:#d7ffe9;
+    background:#1c1b19;border-radius:14px;padding:20px 22px;display:none;white-space:pre-wrap;line-height:1.6}
+  .audit.show{display:block}
+
+  /* ---- reveal box ---- */
+  .reveal{font-family:var(--mono);font-size:clamp(15px,1.4vw,19px);background:#1c1b19;color:#d7ffe9;
+    border-radius:16px;padding:24px;white-space:pre-wrap;line-height:1.55;display:none;max-height:52vh;overflow:auto}
+  .reveal.show{display:block}
+
+  /* ---- figures / images ---- */
+  .figure{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);position:relative}
+  .figure img{display:block;width:100%;height:auto;max-height:52vh;object-fit:contain;background:var(--bg)}
+  .figure figcaption{font-size:clamp(15px,1.4vw,18px);color:var(--muted);padding:12px 18px;border-top:1px solid var(--line)}
+  .ph{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    min-height:34vh;border:2px dashed var(--line);border-radius:16px;color:var(--muted);
+    font-size:clamp(17px,1.6vw,21px);padding:24px;gap:8px}
+  .ph code{background:var(--bg);padding:3px 8px;border-radius:6px;color:var(--accent)}
+
+  /* ---- mini UI mockups (slide 10) ---- */
+  .mock{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:11px;font-size:14px;line-height:1.35}
+  .mrow{display:flex;align-items:center;gap:8px}
+  .mock-pill{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 11px;font-weight:600;font-size:13px}
+  .mock-btn{background:var(--accent);color:#fff;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;display:inline-block}
+  .mock-code{font-family:var(--mono);font-size:13px;color:#54534d;background:var(--surface);
+    border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:7px 0}
+  .mock-nav{display:flex;gap:7px;margin-bottom:10px}
+  .mock-tab{font-size:13px;padding:4px 10px;border-radius:7px;color:var(--muted)}
+  .mock-tab.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .mock-step{display:flex;align-items:center;gap:9px;margin:5px 0;font-size:14px}
+  .mock-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--accent);flex:0 0 auto;
+    display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);font-weight:700}
+  .mock-dot.done{background:var(--accent);color:#fff}
+  .mock-opt{border:1px solid var(--line);border-radius:8px;padding:6px 11px;margin:5px 0;font-size:14px;background:var(--surface)}
+  .mock-opt.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .mock-bar{height:7px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:7px}
+  .mock-bar>span{display:block;height:100%;background:var(--accent)}
+  /* ---- slide 3 transformation list ---- */
+  .xform{display:flex;flex-direction:column;gap:16px}
+  .xrow{display:grid;grid-template-columns:38px 1fr auto auto;align-items:center;gap:16px;font-size:clamp(19px,2vw,26px)}
+  .xicon{width:38px;height:38px;color:var(--accent);display:inline-flex;align-items:center;justify-content:center}
+  .xicon svg{width:30px;height:30px}
+  .xlabel{font-weight:500}
+  .xarrow{color:var(--muted)}
+  .xhtml{font-family:var(--mono);font-size:clamp(15px,1.5vw,19px);background:var(--accent-soft);
+    color:var(--accent);padding:5px 13px;border-radius:8px;font-weight:600}
+  /* ---- interactive closer ---- */
+  .turn-chip{font-size:clamp(16px,1.6vw,21px);background:var(--accent-soft);color:var(--accent);
+    padding:9px 18px;border-radius:999px;font-weight:500;animation:fade .25s ease}
+  .turn-chip b{font-weight:700}
+  #turnInput::placeholder{color:var(--muted)}
+  .logo-card{display:flex;flex-direction:column;gap:12px}
+  .logo-row{display:flex;align-items:center;gap:14px}
+  .logo-row img{height:clamp(34px,3.4vw,46px);width:auto}
+  .logo-fallback{font-size:clamp(22px,2.2vw,30px);font-weight:700}
+
+  /* ---- chrome ---- */
+  .progress{position:fixed;left:0;top:0;height:5px;background:var(--accent);z-index:30;transition:width .3s}
+  .footer{position:fixed;left:0;right:0;bottom:0;height:52px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 26px;font-size:clamp(15px,1.4vw,18px);color:var(--muted);
+    background:rgba(250,249,246,.9);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:20}
+  .footer .brand{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink)}
+  .footer .brand img{height:28px;width:auto}
+  .dots{display:flex;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line);cursor:pointer}
+  .dot.on{background:var(--accent);transform:scale(1.3)}
+  .timer{font-family:var(--mono)}
+  .notes{position:fixed;left:0;right:0;bottom:52px;max-height:42vh;overflow:auto;background:#1c1b19;
+    color:#f0eee6;padding:24px 30px;font-size:clamp(17px,1.7vw,22px);line-height:1.55;display:none;z-index:25;border-top:4px solid var(--accent)}
+  .notes.show{display:block} .notes b{color:#b9b2ff}
+  .hint{position:fixed;right:20px;top:16px;font-size:clamp(13px,1.2vw,16px);color:var(--muted);z-index:30}
+  .hint b{color:var(--accent)}
+  #editBanner{position:fixed;left:0;right:0;top:0;z-index:40;background:var(--accent);color:#fff;
+    display:none;align-items:center;justify-content:center;gap:18px;padding:12px 20px;font-size:clamp(16px,1.5vw,20px);font-weight:600}
+  #editBanner.show{display:flex}
+  #editBanner button{font:inherit;font-weight:700;cursor:pointer;background:#fff;color:var(--accent);
+    border:none;border-radius:10px;padding:8px 16px}
+  body.editing [contenteditable]{outline:2px dashed rgba(255,255,255,.0)}
+  body.editing .slide h1:hover,body.editing .slide h2:hover,body.editing .slide p:hover,
+  body.editing .slide li:hover,body.editing .slide h3:hover,body.editing .lead:hover{
+    outline:2px dashed var(--accent);outline-offset:4px;border-radius:4px}
+  .center{align-items:center;text-align:center}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="hint">← → move &nbsp;·&nbsp; <b>N</b> notes &nbsp;·&nbsp; <b>E</b> edit &nbsp;·&nbsp; <b>F</b> full &nbsp;·&nbsp; <b>T</b> timer</div>
+<div id="editBanner">Edit mode on. Click any heading or line and retype it. <button onclick="downloadDeck()">Download your edited deck</button><button onclick="setEdit(false)" style="background:rgba(255,255,255,.2);color:#fff">Done</button></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · TITLE -->
+  <section class="slide center">
+    <h1>HTML as the new file type</h1>
+    <p class="lead" style="max-width:30ch;margin:0 auto">...for interactive information sharing</p>
+    <p class="muted small" style="margin-top:38px">Izzy Weber &nbsp;·&nbsp; <span class="mono">this whole deck is one .html file!</span></p>
+  </section>
+
+  <!-- 2 · HOOK -->
+  <section class="slide">
+    <p class="kicker">Same content, two formats</p>
+    <h2 style="max-width:20ch">HTML makes an interactive visual out of any document</h2>
+    <div class="cols-2to1">
+      <div class="demobox">
+        <div class="md-view" id="mdView">
+          <h4>Q3 performance report</h4>
+          <p>This report sets out performance across our three regions for the third quarter, covering revenue growth, digital conversion and customer retention.</p>
+          <h4>1. North America</h4>
+          <p>Revenue grew 4.2% quarter on quarter, driven by the enterprise segment and a 9% lift in renewals. Digital conversion held flat at 31%.</p>
+          <h4>2. Europe</h4>
+          <p>Revenue growth of 2.1%, with strength in mid-market accounts and steady retention across the major countries.</p>
+          <h4>3. Asia Pacific</h4>
+          <p>Revenue growth of 1.4%. Enterprise held its base while new business slowed slightly against the prior quarter.</p>
+        </div>
+        <div class="if-view" id="ifView">
+          <div class="if-tabs">
+            <div class="if-tab on" onclick="ifTab(0)">Overview</div>
+            <div class="if-tab" onclick="ifTab(1)">By region</div>
+            <div class="if-tab" onclick="ifTab(2)">Trends</div>
+          </div>
+          <div class="if-body">
+            <div class="if-pane" data-pane="0">
+              <div class="metric-row">
+                <div class="metric"><div class="v">+4.2%</div><div class="l">N. America</div></div>
+                <div class="metric"><div class="v">3</div><div class="l">regions</div></div>
+                <div class="metric"><div class="v">2.4M</div><div class="l">customers</div></div>
+              </div>
+              <div class="ctrl" style="margin-bottom:0"><label>Forecast growth <b><span id="ifGrowth">4</span>%</b></label>
+                <input type="range" id="ifGrowthR" min="0" max="12" value="4" step="1" oninput="ifForecast()"></div>
+              <div class="bar" style="margin-top:10px"><span id="ifBar" style="width:33%"></span></div>
+              <p class="muted small" style="margin:8px 0 0">Projected next quarter <b id="ifProj">2.50M</b> customers</p>
+            </div>
+            <div class="if-pane" data-pane="1" style="display:none">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div><div class="mrow" style="justify-content:space-between"><span>North America</span><span class="muted">+4.2%</span></div><div class="bar"><span style="width:84%"></span></div></div>
+                <div><div class="mrow" style="justify-content:space-between"><span>Europe</span><span class="muted">+2.1%</span></div><div class="bar"><span style="width:52%"></span></div></div>
+                <div><div class="mrow" style="justify-content:space-between"><span>Asia Pacific</span><span class="muted">+1.4%</span></div><div class="bar"><span style="width:34%"></span></div></div>
+              </div>
+            </div>
+            <div class="if-pane" data-pane="2" style="display:none">
+              <div style="display:flex;align-items:flex-end;gap:14px;height:130px;padding-top:6px">
+                <div style="flex:1;text-align:center"><div style="height:46px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q1</span></div>
+                <div style="flex:1;text-align:center"><div style="height:64px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q2</span></div>
+                <div style="flex:1;text-align:center"><div style="height:82px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q3</span></div>
+                <div style="flex:1;text-align:center"><div style="height:100px;background:var(--accent);border-radius:6px 6px 0 0"></div><span class="muted small">Q4</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>A report gets read; the same content as an interface can be explored.</p>
+        <button class="btn primary" onclick="toggleHook()" id="hookBtn">Show it as an HTML interface</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · THE SHIFT -->
+  <section class="slide">
+    <p class="kicker">Last month's viral blog post</p>
+    <div class="cols">
+      <div>
+        <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
+      </div>
+      <div>
+        <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new everything, within reason.</p>
+        <div class="xform">
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M12 16v4M8 20h8"/></svg></span><span class="xlabel">Deck</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span class="xlabel">Memo</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.4" fill="var(--surface)"/><circle cx="15" cy="12" r="2.4" fill="var(--surface)"/><circle cx="8" cy="18" r="2.4" fill="var(--surface)"/></svg></span><span class="xlabel">Model</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21v-6M11 21V8M16 21v-9"/></svg></span><span class="xlabel">Dashboard</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v4c0 1 2.5 2 5 2s5-1 5-2v-4"/></svg></span><span class="xlabel">Training materials</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · WHAT IS A .HTML FILE -->
+  <section class="slide">
+    <p class="kicker">What a .html file actually is</p>
+    <h2>Three languages, one file, nothing to install.</h2>
+    <div class="chips">
+      <span class="chip"><b>HTML</b> the words and structure</span>
+      <span class="chip"><b>CSS</b> how it looks</span>
+      <span class="chip"><b>JavaScript</b> what it does, like the maths and filters</span>
+    </div>
+    <div class="cols3">
+      <div class="card"><h3>One file</h3><p>It holds all three, plus tables, charts and images. There is nothing else to download.</p></div>
+      <div class="card"><h3>Opens anywhere</h3><p>Double-click and it runs in any browser, on any device, offline. No app and no licence.</p></div>
+      <div class="card"><h3>Easy to share</h3><p>Email the file, drop it in Teams, or host it at a link. That is the whole distribution step.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 · YOUR DEMO -->
+  <section class="slide">
+    <p class="kicker">My example · built in one prompt</p>
+    <h2 style="max-width:24ch">A utilisation model I can change in the room, not a spreadsheet I email round.</h2>
+    <div class="cols">
+      <div>
+        <p>I built this to work out team utilisation. Drag an input and every number updates live.</p>
+        <p>It is one file. I host it and send a link, or send the file itself.</p>
+        <a class="btn primary" id="demoLink" href="https://YOUR-DEMO.fly.dev" target="_blank" rel="noopener">Open my live utilisation model</a>
+        <p class="muted small" style="margin-top:16px">Edit the link above (press E) to point at your hosted file.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/utilisation-demo.jpg" alt="Screenshot of the utilisation model" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
+        <div class="ph">Drop your screenshot at <code>assets/utilisation-demo.png</code><span class="small">A still image keeps the slide alive if the live demo will not load.</span></div>
+        <figcaption>My utilisation model, running as a single HTML file.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 7 · OBJECTION: EDITING + INVISIBLE CONTEXT -->
+  <section class="slide">
+    <p class="kicker">Objection · "Nobody else can edit it"</p>
+    <h2>Put the brief inside the file, where no one has to see it.</h2>
+    <div class="cols">
+      <div>
+        <p>The fear is a black box that only its author can change.</p>
+        <p>The fix is to write the brief, the assumptions and the sources into the file, invisible to viewers but read instantly by the next person or the next AI.</p>
+        <p class="muted">Then editing is simple. Open it in any text editor, or hand it back to your favourite LLM and say what to change. You can even retype the words right here. Press <b>E</b>.</p>
+        <button class="btn primary" onclick="reveal()" id="revBtn">Reveal the hidden context in this file</button>
+      </div>
+      <div>
+        <div class="reveal" id="revBox"></div>
+        <p class="muted small" id="revHint">This deck carries its own brief, audience and sources, written in but never shown. Watch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · OBJECTION: TRUST THE MATHS -->
+  <section class="slide">
+    <p class="kicker">Objection · "I cannot trust the maths"</p>
+    <h2>Make the HTML show its logic.</h2>
+    <div class="cols">
+      <div>
+        <div class="ctrl"><label>Billable hours per week <b><span id="bh">28</span></b></label>
+          <input type="range" id="bhR" min="0" max="40" value="28" step="1" oninput="calc()"></div>
+        <div class="ctrl"><label>Available capacity <b><span id="cap">37.5</span> hrs</b></label>
+          <input type="range" id="capR" min="20" max="45" value="37.5" step="0.5" oninput="calc()"></div>
+        <div class="ctrl"><label>Target utilisation <b><span id="tg">75</span>%</b></label>
+          <input type="range" id="tgR" min="50" max="95" value="75" step="1" oninput="calc()"></div>
+        <button class="btn" onclick="toggleAudit()" id="auditBtn">Show the calculation</button>
+        <div class="audit" id="audit"></div>
+      </div>
+      <div>
+        <div class="result">
+          <p class="muted" style="margin:0 0 6px">Utilisation</p>
+          <div class="util ok" id="util">75%</div>
+          <p id="verdict" style="margin:14px 0 0">On target.</p>
+          <div class="bar" style="margin-top:18px"><span id="utilBar" style="width:75%"></span></div>
+        </div>
+        <p class="muted small" style="margin-top:14px">A "show the calculation" panel, a self-check that flags totals that do not add up, and inline sources. That is how it stays defensible across the business.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · CONVERGENCE -->
+  <section class="slide">
+    <p class="kicker">Not one person's opinion</p>
+    <h2>Claude and OpenAI shipped the same idea within weeks.</h2>
+    <div class="cols">
+      <div class="card logo-card">
+        <div class="logo-row">
+          <img src="assets/claude_logo.svg" alt="Claude" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">Claude</span>
+          <span class="tag" style="margin:0">Anthropic</span>
+        </div>
+        <h3>Artifacts</h3>
+        <p>Claude generates an HTML app inside the chat and gives you a share link. Often without being asked.</p>
+        <figure class="figure" style="margin-top:2px">
+          <img src="assets/claude-artifact.png" alt="Claude artifact UI" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
+          <div class="ph" style="min-height:13vh">Drop <code>assets/claude-artifact.png</code></div>
+        </figure>
+      </div>
+      <div class="card logo-card">
+        <div class="logo-row">
+          <img src="assets/codex_logo.svg" alt="Codex" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span class="logo-fallback" style="display:none">Codex</span>
+          <span class="tag coral" style="margin:0">2 June 2026</span>
+        </div>
+        <h3>Codex Sites</h3>
+        <p>Describe it in plain English. Codex builds it, hosts it, and hands back a shareable link with sign-in.</p>
+        <figure class="figure" style="margin-top:2px">
+          <img src="assets/codex-sites.png" alt="Codex Sites UI" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
+          <div class="ph" style="min-height:13vh">Drop <code>assets/codex-sites.png</code></div>
+        </figure>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:12px;text-align:center">The pattern is the same on both. A prompt goes in, a live link comes out.</p>
+  </section>
+
+  <!-- 10 · QUICK WINS -->
+  <section class="slide">
+    <p class="kicker">Where this earns its keep</p>
+    <h2>Four things we could build for colleagues this month.</h2>
+    <div class="cols4">
+      <div class="card">
+        <span class="tag">Enablement</span>
+        <h3>Interactive prompt packs</h3>
+        <p style="margin-bottom:10px">Pick a role, get the prompt, copy it. A tool people open, not a PDF they ignore.</p>
+        <div class="mock">
+          <div class="mrow" style="justify-content:space-between;margin-bottom:6px">
+            <span class="mock-pill">Marketing &#9662;</span>
+            <span class="muted" style="font-size:13px">12 prompts</span>
+          </div>
+          <div class="mock-code">Draft three subject lines for tomorrow's product launch email, upbeat tone...</div>
+          <span class="mock-btn">Copy prompt</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="tag">Enablement</span>
+        <h3>Self-service playbooks</h3>
+        <p style="margin-bottom:10px">"AI for your team" as a clickable guide with worked examples they can run.</p>
+        <div class="mock">
+          <div class="mock-nav"><span class="mock-tab on">Start</span><span class="mock-tab">Prompt</span><span class="mock-tab">Review</span></div>
+          <div class="mock-step"><span class="mock-dot done">&#10003;</span> Choose the right tool</div>
+          <div class="mock-step"><span class="mock-dot">2</span> Write a clear brief</div>
+          <div class="mock-step"><span class="mock-dot">3</span> Check the output</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="tag">Enablement</span>
+        <h3>Training micro-apps</h3>
+        <p style="margin-bottom:10px">A two-minute quiz or a "build your first prompt" sandbox, shipped as one file.</p>
+        <div class="mock">
+          <div class="mrow" style="justify-content:space-between;margin-bottom:6px">
+            <span style="font-weight:600">Question 2 of 5</span><span class="muted" style="font-size:13px">40%</span>
+          </div>
+          <div style="margin-bottom:6px">Which brief gets a better summary?</div>
+          <div class="mock-opt sel">Specific, with the audience named</div>
+          <div class="mock-opt">"Summarise this"</div>
+          <div class="mock-bar"><span style="width:40%"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="tag teal">Take it further</span>
+        <h3>Feedback built in</h3>
+        <p style="margin-bottom:10px">A thumbs up or down inside an async training, so you gather data while people learn.</p>
+        <div class="mock">
+          <div style="margin-bottom:8px;font-weight:600">Was this useful?</div>
+          <div class="mrow" style="gap:8px;margin-bottom:8px">
+            <span class="mock-opt sel" style="margin:0;flex:1;text-align:center">Yes</span>
+            <span class="mock-opt" style="margin:0;flex:1;text-align:center">No</span>
+          </div>
+          <div class="mrow" style="justify-content:space-between"><span class="muted" style="font-size:13px">82% yes</span><span class="muted" style="font-size:13px">214 replies</span></div>
+          <div class="mock-bar"><span style="width:82%"></span></div>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:10px">Each file carries its own context, so translating one into another language is a single prompt.</p>
+  </section>
+
+  <!-- 11 · INTERACTIVE CLOSER -->
+  <section class="slide center">
+    <p class="kicker">Your turn</p>
+    <h2 style="max-width:22ch">What will you turn into an interface first?</h2>
+    <div style="max-width:580px;margin:0 auto;width:100%">
+      <div class="mrow" style="gap:10px;justify-content:center">
+        <input type="text" id="turnInput" placeholder="a report, a tracker, a checklist..." autocomplete="off"
+          style="flex:1;font-size:clamp(18px,1.8vw,22px);padding:13px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addTurn();}">
+        <button class="btn primary" onclick="addTurn()">Add</button>
+      </div>
+      <div id="turnList" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px"></div>
+    </div>
+    <p class="muted small" style="margin-top:30px">And yes, everything you just watched is one HTML file. I will send it to you.</p>
+  </section>
+
+  <!-- 12 · SOURCES -->
+  <section class="slide">
+    <p class="kicker">Sources</p>
+    <h2>Where this comes from.</h2>
+    <ul style="max-width:30ch">
+      <li>Thariq Shihipar (@trq212), "HTML is the new markdown"</li>
+      <li>Lenny's Newsletter, How I AI, May 2026</li>
+      <li>OpenAI Codex Sites, 2 June 2026</li>
+      <li>The AI Daily Brief, Nathaniel Whittemore, 7 June 2026</li>
+    </ul>
+    <!--
+      Logo credit:
+      Claude logo, Anthropic, anthropic.com, CC0,
+        https://commons.wikimedia.org/w/index.php?curid=164296390
+    -->
+    <p class="muted small" style="margin-top:18px">Claude logo via Wikimedia Commons, CC0.</p>
+  </section>
+
+</div>
+
+<div class="notes" id="notes"></div>
+<div class="footer">
+  <div class="brand">
+    <span><b id="slNum">1</b> / <span id="slTot">12</span></span>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="timer" id="timer">00:00</div>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0, editing=false;
+const presNotes=[
+ "Open cold. 'I will teach you something you can use tomorrow, and I will prove the point with the lesson itself.' Do not explain the meta yet. Let it land at the very end.",
+ "Press the button live so they SEE the wall of text collapse into an interface. Then put the question to them and wait for a real answer. This is the interactive spine.",
+ "Read the quote, then translate it into plain terms for your audience. Put the strategy question to the most senior person and give them room. The training-materials line is the one that matters.",
+ "Keep it tight, it is the only how-it-works slide. Payoff is 'no install, opens anywhere, email the file.' Ask the room where that removes friction. Someone will have a concrete answer.",
+ "YOUR demo. Open the live link if wifi allows, fall back to the screenshot if not. Say what you built and why a spreadsheet would not have travelled as well.",
+ "Signature move. Click Reveal and let the hidden brief scroll up. 'This was here the whole time, you never saw it. That is how others edit it.' Then mention press E to retype text. Slow down here.",
+ "Drag a slider past target, watch it turn coral, then hit Show the calculation. 'It shows its working every time it opens.' Tie to responsible use across the business.",
+ "Defuse the hype worry. Two competitors, same idea, same month. One calm line, do not oversell.",
+ "Make it concrete for your L and D context. The localisation line lands for any multi-market org, the file carries its own context so translation is one prompt.",
+ "Your turn. Invite them to name a document they would convert, type it in, watch it land as a chip. End on their use cases, then drop the 'this is one HTML file' line last.",
+ "Land on the sources, offer to send the file, invite questions. The ideas on the earlier slides were the call to action, you do not need another."
+];
+const dotsEl=document.getElementById('dots');
+slides.forEach((_,n)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(n);dotsEl.appendChild(d);});
+const dots=[...document.querySelectorAll('.dot')];
+document.getElementById('slTot').textContent=slides.length;
+function go(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+  document.getElementById('slNum').textContent=i+1;
+  document.getElementById('progress').style.width=((i+1)/slides.length*100)+'%';
+  document.getElementById('notes').innerHTML='<b>Slide '+(i+1)+'.</b> '+presNotes[i];
+}
+function next(){go(i+1)} function prev(){go(i-1)}
+
+function editableEls(){return document.querySelectorAll('.slide h1,.slide h2,.slide h3,.slide p,.slide li,.slide .lead,.slide .chip,.slide figcaption');}
+function setEdit(on){
+  editing=on;
+  document.body.classList.toggle('editing',on);
+  document.getElementById('editBanner').classList.toggle('show',on);
+  editableEls().forEach(el=>{ if(on){el.setAttribute('contenteditable','true');} else {el.removeAttribute('contenteditable');} });
+}
+function downloadDeck(){
+  const wasEditing=editing; setEdit(false);
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));
+  clone.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  const eb=clone.querySelector('#editBanner'); if(eb) eb.classList.remove('show');
+  const html='<!DOCTYPE html>\n'+clone.outerHTML;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+  a.download='html-microteach-edited.html'; a.click();
+  if(wasEditing) setEdit(true);
+}
+
+document.addEventListener('keydown',e=>{
+  const inText = e.target.isContentEditable || /input|textarea/i.test(e.target.tagName);
+  if(inText){ if(e.key==='Escape') setEdit(false); return; }
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(slides.length-1);}
+  else if(e.key.toLowerCase()==='n'){document.getElementById('notes').classList.toggle('show');}
+  else if(e.key.toLowerCase()==='e'){setEdit(!editing);}
+  else if(e.key.toLowerCase()==='f'){toggleFull();}
+  else if(e.key.toLowerCase()==='t'){resetTimer();}
+});
+document.getElementById('deck').addEventListener('click',e=>{
+  if(editing||e.target.closest('button,input,.if-tab,.dot,a,[contenteditable],.figure'))return;
+  (e.clientX<innerWidth*0.3)?prev():(e.clientX>innerWidth*0.7?next():null);
+});
+function toggleFull(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();} else {document.exitFullscreen&&document.exitFullscreen();} }
+
+let hookShown=false;
+function toggleHook(){
+  hookShown=!hookShown;
+  document.getElementById('mdView').style.display=hookShown?'none':'block';
+  document.getElementById('ifView').style.display=hookShown?'block':'none';
+  document.getElementById('hookBtn').textContent=hookShown?'Back to the report':'Show it as an HTML interface';
+}
+function ifTab(n){
+  document.querySelectorAll('#ifView .if-tab').forEach((t,k)=>t.classList.toggle('on',k===n));
+  document.querySelectorAll('#ifView .if-pane').forEach(p=>p.style.display=(+p.dataset.pane===n)?'block':'none');
+}
+function ifForecast(){
+  const g=+document.getElementById('ifGrowthR').value;
+  document.getElementById('ifGrowth').textContent=g;
+  document.getElementById('ifProj').textContent=(2.4*(1+g/100)).toFixed(2)+'M';
+  document.getElementById('ifBar').style.width=Math.round(g/12*100)+'%';
+}
+function addTurn(){
+  const inp=document.getElementById('turnInput'); const v=(inp.value||'').trim(); if(!v)return;
+  const chip=document.createElement('span'); chip.className='turn-chip';
+  chip.innerHTML='<b>'+v.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</b> &rarr; interface';
+  document.getElementById('turnList').appendChild(chip);
+  inp.value=''; inp.focus();
+}
+
+function calc(){
+  const bh=+document.getElementById('bhR').value, cap=+document.getElementById('capR').value, tg=+document.getElementById('tgR').value;
+  document.getElementById('bh').textContent=bh; document.getElementById('cap').textContent=cap; document.getElementById('tg').textContent=tg;
+  const util=cap>0?(bh/cap*100):0, u=Math.round(util);
+  const el=document.getElementById('util'); el.textContent=u+'%';
+  document.getElementById('utilBar').style.width=Math.min(100,u)+'%';
+  const over=util>tg+0.5, under=util<tg-0.5;
+  el.className='util '+(over?'over':(under?'':'ok'));
+  document.getElementById('utilBar').style.background=over?'#993c1d':(under?'#854f0b':'#0f6e56');
+  document.getElementById('verdict').textContent=
+    over?('Over by '+Math.round(util-tg)+' points. Burnout risk.'):
+    under?('Under target by '+Math.round(tg-util)+' points. Spare capacity.'):'On target.';
+  document.getElementById('audit').textContent=
+    'billable hours     = '+bh+'\n'+
+    'available capacity = '+cap+' hrs\n'+
+    'utilisation        = billable / capacity\n'+
+    '                   = '+bh+' / '+cap+'\n'+
+    '                   = '+util.toFixed(3)+'\n'+
+    '                   = '+u+'%\n'+
+    'target             = '+tg+'%\n'+
+    'variance           = '+(util-tg).toFixed(1)+' points';
+}
+let auditShown=false;
+function toggleAudit(){auditShown=!auditShown;document.getElementById('audit').classList.toggle('show',auditShown);
+  document.getElementById('auditBtn').textContent=auditShown?'Hide the calculation':'Show the calculation';}
+calc();
+if(document.getElementById('ifGrowthR')) ifForecast();
+
+function reveal(){
+  const ctx=document.getElementById('lesson-context').textContent.trim();
+  const box=document.getElementById('revBox');
+  box.textContent='// Hidden inside this .html file, invisible to viewers:\n\n'+ctx;
+  box.classList.add('show');
+  document.getElementById('revHint').style.display='none';
+  document.getElementById('revBtn').textContent='It was in the file all along.';
+}
+
+let t0=Date.now();
+function tick(){const s=Math.floor((Date.now()-t0)/1000);
+  document.getElementById('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function resetTimer(){t0=Date.now();tick();}
+setInterval(tick,1000);
+go(0);
+</script>
+</body>
+</html>
