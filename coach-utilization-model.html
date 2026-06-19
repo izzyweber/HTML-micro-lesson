@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Utilization Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Spectral:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2B3A; --paper:#FAF8F4; --card:#FFFFFF; --line:#E5E0D6; --muted:#6B7280;
+  --delivery:#0F6E56; --prep:#C98A1B; --meeting:#5A6B7D; --tri:#7B4B94; --admin:#3B6FA0;
+  --other:#8A8174; --cpd:#B0567A; --cover:#0B4F8A;
+  --c-alex:#0F6E56; --c-samira:#1D5FA8; --c-jordan:#7B4B94; --c-adel:#C26A14; --c-tbc:#8A8174;
+  --ok:#1D9E75; --warn:#D97706; --over:#DC2626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.45}
+header{padding:26px 32px 16px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px}
+h1{font-family:'Spectral',Georgia,serif;font-weight:600;font-size:23px;letter-spacing:-0.01em}
+h1 span{color:var(--muted);font-family:'Archivo';font-size:13px;font-weight:500;margin-left:10px}
+.month-picker{display:flex;gap:4px}
+.month-picker button{padding:6px 14px;border:1px solid var(--line);background:var(--card);border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;color:var(--ink)}
+.month-picker button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+main{display:grid;grid-template-columns:330px 1fr;min-height:calc(100vh - 78px)}
+aside{border-right:1px solid var(--line);padding:22px 20px;background:var(--card);font-size:13px}
+.panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin:18px 0 9px}
+.panel-title:first-child{margin-top:0}
+.input-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;gap:8px}
+.input-row label{flex:1}
+.input-row input[type=number]{width:58px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:13px;text-align:right;background:var(--paper)}
+input:focus,select:focus{outline:2px solid var(--ink);outline-offset:1px}
+.hint{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.4}
+.learner-grid{display:grid;grid-template-columns:52px 48px 48px 1fr;gap:4px 6px;align-items:center;margin-bottom:5px;font-size:12px}
+.learner-grid .nm{font-weight:600;font-size:12.5px}
+.learner-grid input{width:100%;padding:4px 5px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:12px;text-align:right;background:var(--paper)}
+.learner-grid select{width:100%;padding:4px 3px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:11px;background:var(--paper)}
+.lg-head{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.other-grid{display:grid;grid-template-columns:52px repeat(5,1fr);gap:4px 4px;align-items:center;margin-bottom:5px}
+.other-grid .nm{font-weight:600;font-size:12.5px}
+.other-grid input{width:100%;padding:4px 3px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:11.5px;text-align:right;background:var(--paper)}
+.og-head{font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;text-align:center}
+.off-block{margin-bottom:12px}
+.off-block .nm{font-weight:600;font-size:12.5px;margin-bottom:3px}
+.off-block select[multiple]{width:100%;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:11.5px;background:var(--paper);padding:3px}
+.off-block .cover-row{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:11.5px;color:var(--muted)}
+.off-block .cover-row select{flex:1;padding:3px 4px;border:1px solid var(--line);border-radius:6px;font-size:11.5px;background:var(--paper)}
+.cover-warn{font-size:11px;color:#991B1B;background:#FEF2F2;border:1px solid #FECACA;border-radius:6px;padding:5px 8px;margin-top:5px;line-height:1.4}
+.content{padding:22px 32px;overflow-x:auto}
+.coach-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.coach-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;cursor:pointer;transition:border-color .15s}
+.coach-card:hover{border-color:var(--ink)}
+.coach-card.selected{border-color:var(--ink);border-width:2px;padding:12px 14px}
+.coach-card .name{font-weight:600;font-size:14px}
+.coach-card .pct{font-family:'Spectral',serif;font-size:27px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
+.coach-card .meta{font-size:10.5px;color:var(--muted);margin-top:3px}
+.coach-card.agg .pct{font-size:18px;margin-top:6px;color:var(--muted)}
+.bar{height:5px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.legend .item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.legend .sw{width:13px;height:13px;border-radius:3px}
+.legend-note{font-size:12px;color:var(--muted);font-style:italic;margin-left:auto}
+.warning{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;border-radius:8px;padding:8px 14px;font-size:12.5px;margin-bottom:6px}
+.note-banner{background:#F0F7F4;border:1px solid #C9E5DA;color:#0F5132;border-radius:8px;padding:8px 14px;font-size:12.5px;margin-bottom:8px}
+.breakdown{display:flex;flex-wrap:wrap;gap:6px 22px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 18px;margin:14px 0 22px;width:fit-content}
+.breakdown div{font-size:12px}
+.breakdown b{display:block;font-size:16px;font-family:'Spectral',serif;font-variant-numeric:tabular-nums}
+.breakdown:empty{display:none}
+.week{margin-bottom:26px}
+.week h3{font-size:13.5px;font-weight:600;margin-bottom:8px}
+.week h3 .badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;margin-left:8px;vertical-align:1px}
+.badge.tri-b{background:#F3E8FA;color:#5B2D75}
+.cal{display:grid;grid-template-columns:52px repeat(5,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.cal .corner,.cal .dayhead{background:var(--paper);border-bottom:1px solid var(--line);padding:5px 8px;font-size:11px;font-weight:600;color:var(--muted)}
+.cal .dayhead{border-left:1px solid var(--line);text-align:center}
+.timecol{position:relative;background:var(--paper)}
+.timecol .t{position:absolute;right:6px;font-size:10px;color:var(--muted);transform:translateY(-50%)}
+.daycol{position:relative;border-left:1px solid var(--line)}
+.hourline{position:absolute;left:0;right:0;border-top:1px solid #F1EDE4}
+.block{position:absolute;border-radius:4px;padding:3px 5px;font-size:10px;font-weight:600;color:#fff;overflow:hidden;line-height:1.25}
+.block small{display:block;font-weight:500;font-size:9px;opacity:.9}
+.block.conflict{outline:2px solid var(--over);outline-offset:-1px}
+.block.dayoff-block{background:repeating-linear-gradient(45deg,#E5E7EB 0,#E5E7EB 6px,#F3F4F6 6px,#F3F4F6 12px);color:#4B5563}
+.block.cover-block{border:2px dashed rgba(255,255,255,.7)}
+@media(max-width:1000px){main{grid-template-columns:1fr}aside{border-right:none;border-bottom:1px solid var(--line)}.coach-cards{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Coach utilization model</h1>
+  <div class="month-picker" id="monthPicker"></div>
+</header>
+<main>
+<aside>
+  <div class="panel-title">Global assumptions</div>
+  <div class="input-row"><label>Capacity (hrs/week)</label><input type="number" id="capWeek" value="35" min="1"></div>
+  <div class="input-row"><label>Prep ratio (hrs per delivery hr)</label><input type="number" id="prepRatio" value="1" step="0.25" min="0"></div>
+  <div class="input-row"><label>Tripartite (hrs/learner/month)</label><input type="number" id="triPer" value="1" step="0.25" min="0"></div>
+  <div class="input-row"><label>Admin &amp; marking (hrs/learner/month)</label><input type="number" id="adminPer" value="1.5" step="0.25" min="0"></div>
+  <div class="input-row"><label>CPD (hrs/month)</label><input type="number" id="cpdPer" value="2" step="0.5" min="0"></div>
+  <p class="hint">Working day is 9–5 with a protected lunch hour near the 12–2 window — lunch shifts by 30 min where that frees a full hour, since tripartites are 1-hour meetings and never split. Tripartites land in the last full working week of each month, replacing that week's sessions (except a cohort's first week). Delivery/prep/meetings recur weekly; tripartite/admin/CPD/other are monthly totals — so 5-week months (June, August) show slightly lower utilization.</p>
+
+  <div class="panel-title">Learners per coach</div>
+  <div class="learner-grid">
+    <span class="lg-head"></span><span class="lg-head">Now</span><span class="lg-head">New</span><span class="lg-head">New from</span>
+  </div>
+  <div id="learnerControls"></div>
+  <p class="hint">Defaults reflect the current cohort intake: new learners join mid-period for some coaches. Adjust the "New from" date to match your cohort start weeks.</p>
+
+  <div class="panel-title">Other commitments (hrs by month)</div>
+  <div class="other-grid">
+    <span></span><span class="og-head">Jun</span><span class="og-head">Jul</span><span class="og-head">Aug</span><span class="og-head">Sep</span><span class="og-head">Oct</span>
+  </div>
+  <div id="otherControls"></div>
+  <p class="hint">Non-programme work per month: alumni support, short courses, business development, and other organisational commitments. Admin and marking is captured separately as it scales with learner numbers.</p>
+
+  <div class="panel-title">Working days per week</div>
+  <div id="daysControls"></div>
+  <p class="hint">Capacity scales with working days — e.g. a coach at 2 days/week has 2/5 of full-time capacity. Calendar day placement is unchanged until exact working days are confirmed.</p>
+
+  <div class="panel-title">Days off & cover</div>
+  <p class="hint">Select sessions a coach will miss (Ctrl/Cmd-click for multiple, "None" to clear). The whole day is marked off; the session and its prep move to the covering coach.</p>
+  <div id="offControls"></div>
+</aside>
+
+<div class="content">
+  <div class="coach-cards" id="coachCards"></div>
+  <div class="legend" id="legend"></div>
+  <div id="noteBanner"></div>
+  <div id="warnings"></div>
+  <div class="breakdown" id="breakdown"></div>
+  <div id="calendars"></div>
+</div>
+</main>
+
+<script>
+const DAY_START=9, DAY_END=17, SLOT_MIN=30;
+const SPD=(DAY_END-DAY_START)*60/SLOT_MIN;
+const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+const COACHES=['Alex','Samira','Jordan','Adel'];
+const MS_DAY=86400000;
+const AGG='__AGG__';
+
+function d(y,m,dd){return new Date(Date.UTC(y,m-1,dd));}
+const weeks=[];
+for(let t=d(2026,6,1).getTime(); t<=d(2026,10,26).getTime(); t+=7*MS_DAY) weeks.push(new Date(t));
+const MONTH_NAMES=['June','July','August','September','October'];
+const months=MONTH_NAMES.map((name,i)=>{
+  const mIdx=i+5;
+  const wks=weeks.filter(w=>w.getUTCMonth()===mIdx);
+  let triWeek=null;
+  for(const w of wks){ const fri=new Date(w.getTime()+4*MS_DAY); if(fri.getUTCMonth()===mIdx) triWeek=w.getTime(); }
+  return {name, idx:mIdx, weeks:wks, triWeek};
+});
+function fmtDate(dt){return dt.getUTCDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][dt.getUTCMonth()];}
+function fmtH(h){const hh=Math.floor(h),mm=Math.round((h-hh)*60);return hh+':'+(mm===0?'00':mm);}
+function hourToSlot(h){return Math.round((h-DAY_START)*60/SLOT_MIN);}
+function slotToHour(s){return DAY_START+s*SLOT_MIN/60;}
+
+const SESSIONS={
+  Alex:[
+    {d:1,s:14,e:16,label:'C2 Track A/B'},
+    {d:2,s:12,e:14,label:'C1 Track B/C'},
+    {d:3,s:10,e:12,label:'C3 Track A',from:d(2026,6,22).getTime()},
+  ],
+  Samira:[
+    {d:1,s:14,e:16,label:'C2 Track A/B'},
+    {d:2,s:12,e:14,label:'C1 Track B/C'},
+    {d:3,s:13,e:15,label:'C3 Track B',from:d(2026,6,22).getTime()},
+  ],
+  Jordan:[
+    {d:0,s:13,e:15,label:'C2 Track C'},
+    {d:2,s:12,e:14,label:'C1 Track B/C'},
+    {d:4,s:13,e:15,label:'C3 Track D',from:d(2026,7,20).getTime()},
+  ],
+  Adel:[
+    {d:3,s:13,e:15,label:'C3 Track C',from:d(2026,6,22).getTime()},
+    {d:1,s:14,e:16,label:'C3 Track E',from:d(2026,9,7).getTime()},
+  ],
+};
+const TBC_SESSIONS=[];
+const ONE_OFFS={ Jordan:[{week:d(2026,7,13).getTime(),d:4,s:13,e:15,label:'Track D onboarding call'}] };
+const MEETINGS=[
+  {d:1,s:12.5,e:13.5,label:'All Hands'},
+  {d:4,s:13,e:14,label:'Coaches mtg'},
+  {d:4,s:15,e:15.5,label:'Appr. mtg'},
+];
+
+let selMonth=0, selCoach='Alex';
+const learnerState={
+  Alex:{base:14,extra:8,from:d(2026,6,22).getTime()},
+  Samira:{base:15,extra:17,from:d(2026,6,22).getTime()},
+  Jordan:{base:7,extra:2,from:d(2026,7,20).getTime()},
+  Adel:{base:0,extra:3,from:d(2026,6,22).getTime()},
+};
+const otherState={
+  Alex:[15,30,30,30,10], Samira:[12,6,6,6,6], Jordan:[0,0,0,0,0], Adel:[16,16,16,16,16],
+};
+const daysState={Alex:5,Samira:5,Jordan:2,Adel:5};
+const daysOff=Object.fromEntries(COACHES.map(c=>[c,new Set()]));
+const coverBy=Object.fromEntries(COACHES.map(c=>[c,'']));
+
+function effLearners(c,weekMs){
+  const L=learnerState[c];
+  return L.base+(weekMs>=L.from?L.extra:0);
+}
+function getInputs(){
+  const v=id=>parseFloat(document.getElementById(id).value)||0;
+  return {capWeek:v('capWeek'),prepRatio:v('prepRatio'),triPer:v('triPer'),adminPer:v('adminPer'),cpdPer:v('cpdPer')};
+}
+
+function sessionInstances(c){
+  const out=[];
+  for(const mo of months){
+    for(const wk of mo.weeks){
+      const wms=wk.getTime();
+      const isTri=wms===mo.triWeek;
+      for(const s of SESSIONS[c]){
+        if(s.from&&wms<s.from)continue;
+        const firstWk=s.from&&wms===s.from;
+        if(isTri&&!firstWk)continue;
+        const dayDate=new Date(wms+s.d*MS_DAY);
+        out.push({key:wms+'|'+s.d+'|'+s.label,month:mo.name,text:DAYS[s.d]+' '+fmtDate(dayDate)+' — '+s.label});
+      }
+      for(const o of (ONE_OFFS[c]||[])) if(o.week===wms){
+        const dayDate=new Date(wms+o.d*MS_DAY);
+        out.push({key:wms+'|'+o.d+'|'+o.label,month:mo.name,text:DAYS[o.d]+' '+fmtDate(dayDate)+' — '+o.label});
+      }
+    }
+  }
+  return out;
+}
+function findSessionTimes(c,wms,dayIdx,label){
+  for(const s of SESSIONS[c]) if(s.d===dayIdx&&s.label===label) return {s:s.s,e:s.e};
+  for(const o of (ONE_OFFS[c]||[])) if(o.week===wms&&o.d===dayIdx&&o.label===label) return {s:o.s,e:o.e};
+  return null;
+}
+function coverClashWarnings(){
+  const out=Object.fromEntries(COACHES.map(c=>[c,[]]));
+  for(const c of COACHES){
+    const cv=coverBy[c];
+    if(!cv)continue;
+    for(const k of daysOff[c]){
+      const p=k.split('|');const wms=parseInt(p[0]),dayIdx=parseInt(p[1]),label=p[2];
+      const t=findSessionTimes(c,wms,dayIdx,label);
+      if(!t)continue;
+      for(const s of SESSIONS[cv]){
+        if(s.d!==dayIdx)continue;
+        if(s.from&&wms<s.from)continue;
+        const mo=months.find(m=>m.weeks.some(w=>w.getTime()===wms));
+        if(mo&&wms===mo.triWeek&&!(s.from&&wms===s.from))continue;
+        if(s.s<t.e&&s.e>t.s){
+          const dayDate=new Date(wms+dayIdx*MS_DAY);
+          out[c].push(cv+' already has '+s.label+' ('+fmtH(s.s)+'–'+fmtH(s.e)+') on '+DAYS[dayIdx]+' '+fmtDate(dayDate)+' — clashes with covering '+label);
+        }
+      }
+      for(const o of (ONE_OFFS[cv]||[])){
+        if(o.week===wms&&o.d===dayIdx&&o.s<t.e&&o.e>t.s){
+          const dayDate=new Date(wms+dayIdx*MS_DAY);
+          out[c].push(cv+' already has '+o.label+' on '+DAYS[dayIdx]+' '+fmtDate(dayDate)+' — clashes with covering '+label);
+        }
+      }
+    }
+  }
+  return out;
+}
+
+function buildMonth(mi,inputs){
+  const month=months[mi];
+  const W=month.weeks.length;
+  const models={};
+  for(const c of COACHES) models[c]={grid:Array.from({length:W},()=>Array.from({length:5},()=>Array(SPD).fill(null))),
+    hours:{delivery:0,cover:0,prep:0,meetings:0,tri:0,admin:0,cpd:0,other:0,dayoff:0},conflicts:[],unplaced:[],notes:[],capMonth:inputs.capWeek*(daysState[c]/5)*W};
+
+  function place(M,w,dd,slot,len,block){
+    if(slot<0||slot+len>SPD)return false;
+    for(let i=0;i<len;i++) if(M.grid[w][dd][slot+i])return false;
+    M.grid[w][dd][slot]=Object.assign({},block,{len:len});
+    for(let i=1;i<len;i++)M.grid[w][dd][slot+i]={cont:true};
+    return true;
+  }
+  function placeFixed(M,w,dd,slot,len,block,desc){
+    let clash=false;
+    for(let i=0;i<len;i++) if(M.grid[w][dd][slot+i]&&!M.grid[w][dd][slot+i].lunch)clash=true;
+    if(clash){M.conflicts.push(desc+' ('+DAYS[dd]+' w/c '+fmtDate(month.weeks[w])+') overlaps an existing block');block=Object.assign({},block,{conflict:true});}
+    M.grid[w][dd][slot]=Object.assign({},block,{len:len});
+    for(let i=1;i<len;i++) if(!M.grid[w][dd][slot+i]||M.grid[w][dd][slot+i].lunch)M.grid[w][dd][slot+i]={cont:true};
+  }
+  const isTriW=w=>month.weeks[w].getTime()===month.triWeek;
+  function offDay(c,w,dd){
+    const wms=month.weeks[w].getTime();
+    for(const k of daysOff[c]){const p=k.split('|');if(parseInt(p[0])===wms&&parseInt(p[1])===dd)return true;}
+    return false;
+  }
+
+  for(const c of COACHES){const M=models[c];
+    for(let w=0;w<W;w++){
+      for(let dd=0;dd<5;dd++){
+        if(offDay(c,w,dd)){
+          place(M,w,dd,0,SPD,{type:'dayoff',label:'Day off',time:''});
+          M.hours.dayoff+=inputs.capWeek/5;
+        }
+      }
+      for(const m of MEETINGS){
+        if(offDay(c,w,m.d))continue;
+        placeFixed(M,w,m.d,hourToSlot(m.s),Math.round((m.e-m.s)*60/SLOT_MIN),{type:'meeting',label:m.label,time:fmtH(m.s)+'–'+fmtH(m.e)},c+': '+m.label);
+        M.hours.meetings+=(m.e-m.s);
+      }
+    }
+  }
+
+  const prepQueue=[];
+  for(const c of COACHES){
+    for(let w=0;w<W;w++){
+      const wms=month.weeks[w].getTime();
+      const items=[];
+      for(const s of SESSIONS[c]){
+        if(s.from&&wms<s.from)continue;
+        const firstWk=s.from&&wms===s.from;
+        if(isTriW(w)&&!firstWk)continue;
+        items.push(s);
+      }
+      for(const o of (ONE_OFFS[c]||[])) if(o.week===wms) items.push(o);
+      for(const s of items){
+        const len=Math.round((s.e-s.s)*60/SLOT_MIN);
+        if(offDay(c,w,s.d)){
+          const cv=coverBy[c];
+          if(cv&&!offDay(cv,w,s.d)){
+            const M=models[cv];
+            placeFixed(M,w,s.d,hourToSlot(s.s),len,{type:'cover',label:'Cover: '+s.label,time:fmtH(s.s)+'–'+fmtH(s.e)},cv+' covering '+c+"'s "+s.label);
+            M.hours.cover+=(s.e-s.s);
+            prepQueue.push({coach:cv,w:w,d:s.d,s:s.s,e:s.e,label:s.label+' (cover)'});
+          } else {
+            models[c].conflicts.push(s.label+' on '+DAYS[s.d]+' w/c '+fmtDate(month.weeks[w])+' needs cover — no covering coach available');
+          }
+        } else {
+          const M=models[c];
+          placeFixed(M,w,s.d,hourToSlot(s.s),len,{type:'delivery',label:s.label,time:fmtH(s.s)+'–'+fmtH(s.e)},c+': '+s.label);
+          M.hours.delivery+=(s.e-s.s);
+          prepQueue.push({coach:c,w:w,d:s.d,s:s.s,e:s.e,label:s.label});
+        }
+      }
+    }
+  }
+
+  for(const c of COACHES){const M=models[c];
+    let maxD=0;
+    for(let w=0;w<W;w++){let cnt=0;
+      for(let dd=0;dd<5;dd++){let has=false;
+        for(let s=0;s<SPD;s++){const b=M.grid[w][dd][s];if(b&&!b.cont&&(b.type==='delivery'||b.type==='meeting'||b.type==='cover')){has=true;break;}}
+        if(has)cnt++;
+      }
+      maxD=Math.max(maxD,cnt);
+    }
+    if(maxD>daysState[c])M.conflicts.push('Fixed sessions and meetings span '+maxD+' weekdays, but '+c+' works '+daysState[c]+' day(s)/week — the schedule needs consolidating onto fewer days');
+  }
+
+  const LUNCH_LEN=Math.round(60/SLOT_MIN);
+  for(const c of COACHES){const M=models[c];
+    for(let w=0;w<W;w++){
+      for(let dd=0;dd<5;dd++){
+        if(offDay(c,w,dd))continue;
+        let best=null;
+        for(let st=0;st<=SPD-LUNCH_LEN;st++){
+          let free=true;
+          for(let i=0;i<LUNCH_LEN;i++) if(M.grid[w][dd][st+i]){free=false;break;}
+          if(!free)continue;
+          const sh=slotToHour(st), eh=slotToHour(st+LUNCH_LEN);
+          const penalty=Math.max(0,12-sh)+Math.max(0,eh-14);
+          const mid=Math.abs((sh+eh)/2-13);
+          let whole=0,run=0;
+          for(let i=0;i<SPD;i++){
+            const occ=M.grid[w][dd][i]||(i>=st&&i<st+LUNCH_LEN);
+            if(occ){whole+=Math.floor(run/2);run=0;}else run++;
+          }
+          whole+=Math.floor(run/2);
+          if(!best||whole>best.whole||(whole===best.whole&&(penalty<best.penalty||(penalty===best.penalty&&mid<best.mid)))) best={st:st,penalty:penalty,mid:mid,whole:whole};
+        }
+        if(best){
+          for(let i=1;i<LUNCH_LEN;i++) M.grid[w][dd][best.st+i]={lunch:true,cont:true};
+          M.grid[w][dd][best.st]={lunch:true,len:LUNCH_LEN};
+        } else {
+          M.notes.push('No free lunch hour on '+DAYS[dd]+' w/c '+fmtDate(month.weeks[w])+' — day fully booked');
+        }
+      }
+    }
+  }
+
+  for(const p of prepQueue){
+    const M=models[p.coach];
+    const prepHrs=(p.e-p.s)*inputs.prepRatio;
+    let need=Math.round(prepHrs*60/SLOT_MIN);
+    if(need<=0)continue;
+    let slot=hourToSlot(p.s)-need, ok=false;
+    while(slot>=0){if(place(M,p.w,p.d,slot,need,{type:'prep',label:'Prep: '+p.label,time:''})){ok=true;break;}slot--;}
+    if(!ok){outer:for(let dd=0;dd<5;dd++)for(let st=0;st<=SPD-need;st++)if(place(M,p.w,dd,st,need,{type:'prep',label:'Prep: '+p.label,time:''})){ok=true;break outer;}}
+    if(ok)M.hours.prep+=prepHrs;else M.unplaced.push('prep for '+p.label+' w/c '+fmtDate(months[mi].weeks[p.w]));
+  }
+
+  function fill(M,w,hrs,type,label,minChunk){
+    minChunk=minChunk||1;
+    let rem=Math.round(hrs*60/SLOT_MIN);
+    for(let pass=0;pass<2&&rem>=minChunk;pass++){
+      const chunk=pass===0?2:1;
+      if(chunk<minChunk)break;
+      for(let dd=0;dd<5&&rem>=chunk;dd++)for(let st=0;st<SPD&&rem>=chunk;st++){
+        const len=Math.min(chunk,rem);
+        if(len<minChunk)continue;
+        if(place(M,w,dd,st,len,{type:type,label:label,time:''}))rem-=len;
+      }
+    }
+    return rem*SLOT_MIN/60;
+  }
+
+  for(const c of COACHES){const M=models[c];
+    const tw=month.weeks.findIndex(w=>w.getTime()===month.triWeek);
+    if(tw<0)continue;
+    const total=effLearners(c,month.weeks[tw].getTime())*inputs.triPer;
+    if(total<=0)continue;
+    const left=fill(M,tw,total,'tri','Tripartite',2);
+    M.hours.tri+=(total-left);
+    if(left>0)M.unplaced.push(left.toFixed(1)+'h tripartite');
+  }
+
+  for(const c of COACHES){const M=models[c];
+    let lost=0,total=0;
+    for(let w=0;w<W;w++){
+      const perWeek=effLearners(c,month.weeks[w].getTime())*inputs.adminPer/W;
+      total+=perWeek;
+      lost+=fill(M,w,perWeek,'admin','Admin & marking');
+    }
+    if(lost>0){for(let w=0;w<W&&lost>0;w++){lost=fill(M,w,lost,'admin','Admin & marking');}}
+    M.hours.admin+=(total-lost);if(lost>0)M.unplaced.push(lost.toFixed(1)+'h admin (month is full)');
+  }
+
+  for(const c of COACHES){const M=models[c];
+    if(inputs.cpdPer<=0)continue;
+    for(let w=0;w<W;w++){const left=fill(M,w,inputs.cpdPer,'cpd','CPD');if(left<inputs.cpdPer){M.hours.cpd+=(inputs.cpdPer-left);if(left>0)M.unplaced.push(left.toFixed(1)+'h CPD');break;}}
+  }
+
+  for(const c of COACHES){const M=models[c];
+    const total=otherState[c][mi];if(total<=0)continue;
+    const per=total/W;let placed=0;
+    for(let w=0;w<W;w++){const left=fill(M,w,per,'other','Other work');placed+=(per-left);}
+    M.hours.other+=placed;
+  }
+
+  for(const c of COACHES){const M=models[c];M.total=Object.values(M.hours).reduce((a,b)=>a+b,0);}
+  return models;
+}
+
+function aggregateEvents(mi){
+  const month=months[mi];
+  const out=month.weeks.map(()=>[[],[],[],[],[]]);
+  month.weeks.forEach((wk,w)=>{
+    const wms=wk.getTime();
+    const isTri=wms===month.triWeek;
+    function offDayA(c,dd){
+      for(const k of daysOff[c]){const p=k.split('|');if(parseInt(p[0])===wms&&parseInt(p[1])===dd)return true;}
+      return false;
+    }
+    for(const c of COACHES){
+      const items=[];
+      for(const s of SESSIONS[c]){
+        if(s.from&&wms<s.from)continue;
+        const firstWk=s.from&&wms===s.from;
+        if(isTri&&!firstWk)continue;
+        items.push(s);
+      }
+      for(const o of (ONE_OFFS[c]||[])) if(o.week===wms) items.push(o);
+      for(const s of items){
+        if(offDayA(c,s.d)){
+          const cv=coverBy[c];
+          if(cv&&!offDayA(cv,s.d)) out[w][s.d].push({s:s.s,e:s.e,label:s.label,coach:cv,cover:true});
+          else out[w][s.d].push({s:s.s,e:s.e,label:s.label,coach:'?',needsCover:true});
+        } else out[w][s.d].push({s:s.s,e:s.e,label:s.label,coach:c});
+      }
+    }
+    for(const s of TBC_SESSIONS){
+      if(s.from&&wms<s.from)continue;
+      const firstWk=s.from&&wms===s.from;
+      if(isTri&&!firstWk)continue;
+      out[w][s.d].push({s:s.s,e:s.e,label:s.label,coach:'TBC'});
+    }
+    for(const m of MEETINGS) out[w][m.d].push({s:m.s,e:m.e,label:m.label,coach:'All',meeting:true});
+  });
+  return out;
+}
+
+const COLORS={delivery:'var(--delivery)',cover:'var(--cover)',meeting:'var(--meeting)',prep:'var(--prep)',tri:'var(--tri)',admin:'var(--admin)',cpd:'var(--cpd)',other:'var(--other)',dayoff:''};
+const OPACITY={delivery:1,cover:1,meeting:1,prep:.65,tri:.35,admin:.35,cpd:.35,other:.35,dayoff:1};
+const COACH_COLORS={Alex:'var(--c-alex)',Samira:'var(--c-samira)',Jordan:'var(--c-jordan)',Adel:'var(--c-adel)',TBC:'var(--c-tbc)','?':'var(--over)',All:'var(--meeting)'};
+
+function render(){
+  const inputs=getInputs();
+  const month=months[selMonth];
+  const models=buildMonth(selMonth,inputs);
+  const clashWarns=coverClashWarnings();
+  const isAgg=selCoach===AGG;
+
+  document.getElementById('monthPicker').innerHTML=MONTH_NAMES.map((m,i)=>'<button class="'+(i===selMonth?'active':'')+'" onclick="setMonth('+i+')">'+m+'</button>').join('');
+
+  let lc='';
+  for(const c of COACHES){
+    const L=learnerState[c];
+    lc+='<div class="learner-grid"><span class="nm">'+c+'</span>'
+    +'<input type="number" min="0" value="'+L.base+'" onchange="setLearner(\''+c+'\',\'base\',this.value)">'
+    +'<input type="number" min="0" value="'+L.extra+'" onchange="setLearner(\''+c+'\',\'extra\',this.value)">'
+    +'<select onchange="setLearner(\''+c+'\',\'from\',this.value)">'+weeks.map(w=>'<option value="'+w.getTime()+'" '+(L.from===w.getTime()?'selected':'')+'>w/c '+fmtDate(w)+'</option>').join('')+'</select></div>';
+  }
+  document.getElementById('learnerControls').innerHTML=lc;
+
+  let otc='';
+  for(const c of COACHES){
+    otc+='<div class="other-grid"><span class="nm">'+c+'</span>'
+    +otherState[c].map((v,i)=>'<input type="number" min="0" value="'+v+'" onchange="setOther(\''+c+'\','+i+',this.value)">').join('')
+    +'</div>';
+  }
+  document.getElementById('otherControls').innerHTML=otc;
+
+  let dc='';
+  for(const c of COACHES){
+    dc+='<div class="input-row"><label>'+c+'</label><input type="number" min="1" max="5" step="1" value="'+daysState[c]+'" onchange="setDays(\''+c+'\',this.value)"></div>';
+  }
+  document.getElementById('daysControls').innerHTML=dc;
+
+  let oc='';
+  for(const c of COACHES){
+    const inst=sessionInstances(c);
+    if(inst.length===0){oc+='<div class="off-block"><div class="nm">'+c+'</div><p class="hint">No scheduled sessions.</p></div>';continue;}
+    let opts='<option value="__none__" '+(daysOff[c].size===0?'selected':'')+'>— None —</option>',curMonth='';
+    for(const it of inst){
+      if(it.month!==curMonth){if(curMonth)opts+='</optgroup>';opts+='<optgroup label="'+it.month+'">';curMonth=it.month;}
+      opts+='<option value="'+it.key+'" '+(daysOff[c].has(it.key)?'selected':'')+'>'+it.text+'</option>';
+    }
+    opts+='</optgroup>';
+    let warnHtml=clashWarns[c].map(x=>'<div class="cover-warn">⚠ '+x+'</div>').join('');
+    oc+='<div class="off-block"><div class="nm">'+c+'</div>'
+    +'<select multiple size="5" onchange="setOff(\''+c+'\',this)">'+opts+'</select>'
+    +'<div class="cover-row">Covered by <select onchange="setCover(\''+c+'\',this.value)"><option value="">No one</option>'+COACHES.filter(x=>x!==c).map(x=>'<option '+(coverBy[c]===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'
+    +warnHtml+'</div>';
+  }
+  document.getElementById('offControls').innerHTML=oc;
+
+  let nb='';
+  if(selMonth===0)nb+='<div class="note-banner">June: new cohort tracks begin w/c 22 June — learner counts step up from that week for affected coaches.</div>';
+  if(selMonth===1)nb+='<div class="note-banner">July: Track D first day of learning 24 July; onboarding call 17 July (1–3pm). Jordan\'s new learners count from w/c 20 Jul.</div>';
+  if(selMonth===3)nb+='<div class="note-banner">September: Track E (Adel) starts w/c 7 Sep, deferred from June — Tuesdays 2–4pm. Learner numbers to be confirmed.</div>';
+  document.getElementById('noteBanner').innerHTML=nb;
+
+  let cardsHtml='<div class="coach-card agg '+(isAgg?'selected':'')+'" onclick="setCoach(\''+AGG+'\')">'
+    +'<div class="name">All coaches</div><div class="pct">Aggregate</div>'
+    +'<div class="meta">Set sessions & meetings only</div></div>';
+  cardsHtml+=COACHES.map(c=>{
+    const M=models[c];const pct=M.capMonth>0?M.total/M.capMonth*100:0;
+    const col=pct>85?'var(--over)':pct>70?'var(--warn)':'var(--ok)';
+    const lEnd=effLearners(c,month.weeks[month.weeks.length-1].getTime());
+    const lStart=effLearners(c,month.weeks[0].getTime());
+    const lTxt=lStart===lEnd?lEnd+' learners':lStart+'→'+lEnd+' learners';
+    return '<div class="coach-card '+(c===selCoach?'selected':'')+'" onclick="setCoach(\''+c+'\')">'
+      +'<div class="name">'+c+'</div><div class="pct" style="color:'+col+'">'+pct.toFixed(0)+'%</div>'
+      +'<div class="meta">'+M.total.toFixed(1)+'h of '+M.capMonth.toFixed(0)+'h · '+lTxt+'</div>'
+      +'<div class="bar"><i style="width:'+Math.min(pct,100)+'%;background:'+col+'"></i></div></div>';
+  }).join('');
+  document.getElementById('coachCards').innerHTML=cardsHtml;
+
+  if(isAgg){
+    document.getElementById('legend').innerHTML=
+      '<div class="item"><div class="sw" style="background:var(--c-alex)"></div>Alex</div>'
+      +'<div class="item"><div class="sw" style="background:var(--c-samira)"></div>Samira</div>'
+      +'<div class="item"><div class="sw" style="background:var(--c-jordan)"></div>Jordan</div>'
+      +'<div class="item"><div class="sw" style="background:var(--c-adel)"></div>Adel</div>'
+      +'<div class="item"><div class="sw" style="background:var(--c-tbc)"></div>TBC</div>'
+      +'<div class="item"><div class="sw" style="background:var(--meeting)"></div>Meetings (all)</div>'
+      +'<div class="item"><div class="sw" style="background:var(--cover);border:2px dashed #fff"></div>Cover</div>'
+      +'<span class="legend-note">Side-by-side blocks are parallel sessions. Coach named on each block.</span>';
+  } else {
+    document.getElementById('legend').innerHTML=
+      '<div class="item"><div class="sw" style="background:var(--delivery)"></div>Delivery</div>'
+      +'<div class="item"><div class="sw" style="background:var(--cover);border:2px dashed #fff"></div>Cover</div>'
+      +'<div class="item"><div class="sw" style="background:var(--meeting)"></div>Meetings</div>'
+      +'<div class="item"><div class="sw" style="background:var(--prep);opacity:.65"></div>Prep</div>'
+      +'<div class="item"><div class="sw" style="background:var(--tri);opacity:.35"></div>Tripartite</div>'
+      +'<div class="item"><div class="sw" style="background:var(--admin);opacity:.35"></div>Admin</div>'
+      +'<div class="item"><div class="sw" style="background:var(--cpd);opacity:.35"></div>CPD</div>'
+      +'<div class="item"><div class="sw" style="background:var(--other);opacity:.35"></div>Other</div>'
+      +'<div class="item"><div class="sw" style="background:repeating-linear-gradient(45deg,#E5E7EB 0,#E5E7EB 4px,#F3F4F6 4px,#F3F4F6 8px)"></div>Day off</div>'
+      +'<span class="legend-note">Solidity = certainty. Blank gaps around midday are protected lunch hours.</span>';
+  }
+
+  const hourPx=38;let cal='';
+
+  if(isAgg){
+    document.getElementById('breakdown').innerHTML='';
+    const evAll=aggregateEvents(selMonth);
+    let aggWarn='';
+    evAll.forEach((days,w)=>{days.forEach((evs,dd)=>{evs.forEach(ev=>{
+      if(ev.needsCover)aggWarn+='<div class="warning">⚠ '+ev.label+' on '+DAYS[dd]+' w/c '+fmtDate(month.weeks[w])+' has no coach (day off, no cover)</div>';
+    });});});
+    document.getElementById('warnings').innerHTML=aggWarn;
+
+    month.weeks.forEach((wk,w)=>{
+      const isTri=wk.getTime()===month.triWeek;
+      cal+='<div class="week"><h3>w/c '+fmtDate(wk)+(isTri?'<span class="badge tri-b">Tripartite week — sessions replaced</span>':'')+'</h3><div class="cal">';
+      cal+='<div class="corner"></div>'+DAYS.map((dn,di)=>{const dd2=new Date(wk.getTime()+di*MS_DAY);return '<div class="dayhead">'+dn+' '+fmtDate(dd2)+'</div>';}).join('');
+      cal+='<div class="timecol" style="height:'+(DAY_END-DAY_START)*hourPx+'px">';
+      for(let hh=DAY_START;hh<=DAY_END;hh++)cal+='<div class="t" style="top:'+(hh-DAY_START)*hourPx+'px">'+hh+':00</div>';
+      cal+='</div>';
+      for(let dd=0;dd<5;dd++){
+        cal+='<div class="daycol" style="height:'+(DAY_END-DAY_START)*hourPx+'px">';
+        for(let hh=DAY_START+1;hh<DAY_END;hh++)cal+='<div class="hourline" style="top:'+(hh-DAY_START)*hourPx+'px"></div>';
+        const evs=evAll[w][dd].slice().sort((a,b)=>a.s-b.s||a.e-b.e);
+        const lanes=[];
+        evs.forEach(ev=>{
+          let li=lanes.findIndex(endT=>endT<=ev.s);
+          if(li<0){lanes.push(ev.e);li=lanes.length-1;}else lanes[li]=ev.e;
+          ev.lane=li;
+        });
+        const nLanes=Math.max(1,lanes.length);
+        evs.forEach(ev=>{
+          const top=(ev.s-DAY_START)*hourPx,hgt=(ev.e-ev.s)*hourPx-2;
+          const wPct=100/nLanes, lPct=ev.lane*wPct;
+          const col=ev.meeting?'var(--meeting)':COACH_COLORS[ev.coach]||'var(--c-tbc)';
+          const cls=ev.cover?'cover-block':'';
+          cal+='<div class="block '+cls+'" style="top:'+top+'px;height:'+hgt+'px;left:calc('+lPct+'% + 2px);width:calc('+wPct+'% - 4px);background:'+col+'">'
+            +ev.label+'<small>'+(ev.meeting?'All coaches':(ev.cover?ev.coach+' (cover)':ev.coach))+' · '+fmtH(ev.s)+'–'+fmtH(ev.e)+'</small></div>';
+        });
+        cal+='</div>';
+      }
+      cal+='</div></div>';
+    });
+  } else {
+    const M=models[selCoach];
+    let wh=M.conflicts.map(x=>'<div class="warning">⚠ '+x+'</div>').join('');
+    if(M.unplaced.length)wh+='<div class="warning">⚠ Couldn\'t fit: '+M.unplaced.join('; ')+'</div>';
+    wh+=clashWarns[selCoach].map(x=>'<div class="warning">⚠ '+x+'</div>').join('');
+    wh+=M.notes.map(x=>'<div class="note-banner">'+x+'</div>').join('');
+    document.getElementById('warnings').innerHTML=wh;
+
+    const h=M.hours;
+    document.getElementById('breakdown').innerHTML=
+      '<div><b style="color:var(--delivery)">'+h.delivery.toFixed(1)+'h</b>Delivery</div>'
+      +'<div><b style="color:var(--cover)">'+h.cover.toFixed(1)+'h</b>Cover</div>'
+      +'<div><b style="color:var(--prep)">'+h.prep.toFixed(1)+'h</b>Prep</div>'
+      +'<div><b style="color:var(--meeting)">'+h.meetings.toFixed(1)+'h</b>Meetings</div>'
+      +'<div><b style="color:var(--tri)">'+h.tri.toFixed(1)+'h</b>Tripartite</div>'
+      +'<div><b style="color:var(--admin)">'+h.admin.toFixed(1)+'h</b>Admin &amp; marking</div>'
+      +'<div><b style="color:var(--cpd)">'+h.cpd.toFixed(1)+'h</b>CPD</div>'
+      +'<div><b style="color:var(--other)">'+h.other.toFixed(1)+'h</b>Other</div>'
+      +'<div><b>'+h.dayoff.toFixed(1)+'h</b>Days off</div>';
+
+    month.weeks.forEach((wk,w)=>{
+      const isTri=wk.getTime()===month.triWeek;
+      cal+='<div class="week"><h3>w/c '+fmtDate(wk)+(isTri?'<span class="badge tri-b">Tripartite week — sessions replaced</span>':'')+'</h3><div class="cal">';
+      cal+='<div class="corner"></div>'+DAYS.map((dn,di)=>{const dd2=new Date(wk.getTime()+di*MS_DAY);return '<div class="dayhead">'+dn+' '+fmtDate(dd2)+'</div>';}).join('');
+      cal+='<div class="timecol" style="height:'+(DAY_END-DAY_START)*hourPx+'px">';
+      for(let hh=DAY_START;hh<=DAY_END;hh++)cal+='<div class="t" style="top:'+(hh-DAY_START)*hourPx+'px">'+hh+':00</div>';
+      cal+='</div>';
+      for(let dd=0;dd<5;dd++){
+        cal+='<div class="daycol" style="height:'+(DAY_END-DAY_START)*hourPx+'px">';
+        for(let hh=DAY_START+1;hh<DAY_END;hh++)cal+='<div class="hourline" style="top:'+(hh-DAY_START)*hourPx+'px"></div>';
+        for(let s=0;s<SPD;s++){
+          const b=M.grid[w][dd][s];
+          if(b&&!b.cont&&!b.lunch){
+            const top=s*SLOT_MIN/60*hourPx,hgt=b.len*SLOT_MIN/60*hourPx-2;
+            const cls=b.type==='dayoff'?'dayoff-block':(b.type==='cover'?'cover-block':'');
+            const style=b.type==='dayoff'?'':'background:'+COLORS[b.type]+';opacity:'+OPACITY[b.type];
+            cal+='<div class="block '+cls+' '+(b.conflict?'conflict':'')+'" style="top:'+top+'px;height:'+hgt+'px;left:3px;right:3px;'+style+'">'+b.label+(b.time?'<small>'+b.time+'</small>':'')+'</div>';
+          }
+        }
+        cal+='</div>';
+      }
+      cal+='</div></div>';
+    });
+  }
+  document.getElementById('calendars').innerHTML=cal;
+}
+function setMonth(i){selMonth=i;render();}
+function setCoach(c){selCoach=c;render();}
+function setLearner(c,k,v){learnerState[c][k]=(k==='from')?parseInt(v):(parseFloat(v)||0);render();}
+function setOther(c,i,v){otherState[c][i]=parseFloat(v)||0;render();}
+function setDays(c,v){daysState[c]=Math.min(5,Math.max(1,parseFloat(v)||5));render();}
+function setOff(c,sel){
+  const vals=Array.from(sel.selectedOptions).map(o=>o.value);
+  if(vals.includes('__none__'))daysOff[c]=new Set();
+  else daysOff[c]=new Set(vals);
+  render();
+}
+function setCover(c,v){coverBy[c]=v;render();}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',render));
+render();
+</script>
+</body>
+</html>

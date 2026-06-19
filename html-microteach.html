@@ -388,8 +388,8 @@
       <div>
         <p>I built this to work out team utilisation. Drag an input and every number updates live.</p>
         <p>It is one file. I host it and send a link, or send the file itself.</p>
-        <a class="btn primary" id="demoLink" href="https://YOUR-DEMO.fly.dev" target="_blank" rel="noopener">Open my live utilisation model</a>
-        <p class="muted small" style="margin-top:16px">Edit the link above (press E) to point at your hosted file.</p>
+        <a class="btn primary" id="demoLink" href="coach-utilization-model.html" target="_blank" rel="noopener">Open my live utilisation model</a>
+        <p class="muted small" style="margin-top:16px">Opens the full model in a new tab. It travels with this deck.</p>
       </div>
       <figure class="figure">
         <img src="assets/utilisation-demo.jpg" alt="Screenshot of the utilisation model" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
@@ -592,6 +592,7 @@ document.getElementById('slTot').textContent=slides.length;
 function go(n){
   i=Math.max(0,Math.min(slides.length-1,n));
   slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  slides[i].querySelectorAll('.frag').forEach(f=>f.classList.remove('shown'));
   dots.forEach((d,k)=>d.classList.toggle('on',k===i));
   document.getElementById('slNum').textContent=i+1;
   document.getElementById('progress').style.width=((i+1)/slides.length*100)+'%';
