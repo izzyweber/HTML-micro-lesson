@@ -192,6 +192,25 @@
   .turn-chip b{font-weight:700}
   #turnInput::placeholder{color:var(--muted)}
   .axlab{fill:var(--muted);font-size:12px;text-anchor:middle;font-family:var(--sans)}
+  /* ---- click-to-reveal fragments ---- */
+  .frag{opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease}
+  .frag.shown{opacity:1;transform:none}
+  /* ---- slide 9 stacked cards ---- */
+  .stack{position:relative;height:46vh;max-width:560px;margin:10px auto 0;width:100%}
+  .stackcard{position:absolute;left:0;right:0;top:50%;margin:0 auto;width:100%;
+    padding:26px 32px;opacity:0;transform:translate(0,-40%) scale(.94);
+    transition:opacity .4s ease,transform .4s ease;box-shadow:0 12px 36px rgba(0,0,0,.10)}
+  .stackcard h3{font-size:clamp(22px,2.3vw,30px)}
+  .stackcard p{font-size:clamp(17px,1.6vw,21px)}
+  .stackcard:nth-child(1){z-index:1}
+  .stackcard:nth-child(2){z-index:2}
+  .stackcard:nth-child(3){z-index:3}
+  .stackcard:nth-child(4){z-index:4}
+  .stackcard.shown{opacity:1}
+  .stackcard.shown:nth-child(1){transform:translate(-13px,-50%) rotate(-4deg)}
+  .stackcard.shown:nth-child(2){transform:translate(12px,-50%) rotate(3deg)}
+  .stackcard.shown:nth-child(3){transform:translate(-8px,-50%) rotate(-2deg)}
+  .stackcard.shown:nth-child(4){transform:translate(7px,-50%) rotate(3deg)}
   .logo-card{display:flex;flex-direction:column;gap:12px}
   .logo-row{display:flex;align-items:center;gap:14px}
   .logo-row img{height:clamp(34px,3.4vw,46px);width:auto}
@@ -355,9 +374,9 @@
       <span class="chip"><b>JavaScript</b> what it does, like the maths and filters</span>
     </div>
     <div class="cols3">
-      <div class="card"><h3>One file</h3><p>It holds all three, plus tables, charts and images. There is nothing else to download.</p></div>
-      <div class="card"><h3>Opens anywhere</h3><p>Double-click and it runs in any browser, on any device, offline. No app and no licence.</p></div>
-      <div class="card"><h3>Easy to share</h3><p>Email the file, drop it in Teams, or host it at a link. That is the whole distribution step.</p></div>
+      <div class="card frag"><h3>One file</h3><p>It holds all three, plus tables, charts and images. There is nothing else to download.</p></div>
+      <div class="card frag"><h3>Opens anywhere</h3><p>Double-click and it runs in any browser, on any device, offline. No app and no licence.</p></div>
+      <div class="card frag"><h3>Easy to share</h3><p>Email the file, drop it in Teams, or host it at a link. That is the whole distribution step.</p></div>
     </div>
   </section>
 
@@ -437,7 +456,7 @@
           <span class="tag" style="margin:0">Anthropic</span>
         </div>
         <h3>Artifacts</h3>
-        <p>Claude generates an HTML app inside the chat and gives you a share link. Often without being asked.</p>
+        <p>Claude generates an HTML app inside the chat and gives you a share link, often without being asked.</p>
         <figure class="figure" style="margin-top:2px">
           <img src="assets/claude-artifact.png" alt="Claude artifact UI" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
           <div class="ph" style="min-height:13vh">Drop <code>assets/claude-artifact.png</code></div>
@@ -457,15 +476,14 @@
         </figure>
       </div>
     </div>
-    <p class="muted" style="margin-top:12px;text-align:center">The pattern is the same on both. A prompt goes in, a live link comes out.</p>
   </section>
 
   <!-- 10 · QUICK WINS -->
   <section class="slide">
     <p class="kicker">Where this earns its keep</p>
     <h2>Four things we could build for colleagues this month.</h2>
-    <div class="cols4">
-      <div class="card">
+    <div class="stack">
+      <div class="card frag stackcard">
         <span class="tag">Enablement</span>
         <h3>Interactive prompt packs</h3>
         <p style="margin-bottom:10px">Pick a role, get the prompt, copy it. A tool people open, not a PDF they ignore.</p>
@@ -478,7 +496,7 @@
           <span class="mock-btn">Copy prompt</span>
         </div>
       </div>
-      <div class="card">
+      <div class="card frag stackcard">
         <span class="tag">Enablement</span>
         <h3>Self-service playbooks</h3>
         <p style="margin-bottom:10px">"AI for your team" as a clickable guide with worked examples they can run.</p>
@@ -489,7 +507,7 @@
           <div class="mock-step"><span class="mock-dot">3</span> Check the output</div>
         </div>
       </div>
-      <div class="card">
+      <div class="card frag stackcard">
         <span class="tag">Enablement</span>
         <h3>Training micro-apps</h3>
         <p style="margin-bottom:10px">A two-minute quiz or a "build your first prompt" sandbox, shipped as one file.</p>
@@ -503,7 +521,7 @@
           <div class="mock-bar"><span style="width:40%"></span></div>
         </div>
       </div>
-      <div class="card">
+      <div class="card frag stackcard">
         <span class="tag teal">Take it further</span>
         <h3>Feedback built in</h3>
         <p style="margin-bottom:10px">A thumbs up or down inside an async training, so you gather data while people learn.</p>
@@ -534,24 +552,11 @@
       </div>
       <div id="turnList" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px"></div>
     </div>
-  </section>
-
-  <!-- 12 · SOURCES -->
-  <section class="slide">
-    <p class="kicker">Sources</p>
-    <h2>Where this comes from.</h2>
-    <ul style="max-width:30ch">
-      <li>Thariq Shihipar (@trq212), "HTML is the new markdown"</li>
-      <li>Lenny's Newsletter, How I AI, May 2026</li>
-      <li>OpenAI Codex Sites, 2 June 2026</li>
-      <li>The AI Daily Brief, Nathaniel Whittemore, 7 June 2026</li>
-    </ul>
     <!--
-      Logo credit:
-      Claude logo, Anthropic, anthropic.com, CC0,
+      Logo credit: Claude logo, Anthropic, anthropic.com, CC0,
         https://commons.wikimedia.org/w/index.php?curid=164296390
     -->
-    <p class="muted small" style="margin-top:18px">Claude logo via Wikimedia Commons, CC0.</p>
+    <p class="muted" style="position:absolute;left:7vw;right:7vw;bottom:60px;font-size:13px;line-height:1.5;text-align:center">Sources: Thariq Shihipar (@trq212), "HTML is the new markdown" &middot; OpenAI Codex Sites, June 2026 &middot; The AI Daily Brief, Nathaniel Whittemore, June 2026. &nbsp; Claude logo via Wikimedia Commons, CC0.</p>
   </section>
 
 </div>
@@ -578,8 +583,7 @@ const presNotes=[
  "Drag a slider past target, watch it turn coral, then hit Show the calculation. 'It shows its working every time it opens.' Tie to responsible use across the business.",
  "Defuse the hype worry. Two competitors, same idea, same month. One calm line, do not oversell.",
  "Make it concrete for your L and D context. The localisation line lands for any multi-market org, the file carries its own context so translation is one prompt.",
- "Your turn. Invite them to name a document they would convert, type it in, watch it land as a chip. End on their use cases, then drop the 'this is one HTML file' line last.",
- "Land on the sources, offer to send the file, invite questions. The ideas on the earlier slides were the call to action, you do not need another."
+ "Your turn, and the final slide. Invite them to name a document they would convert, type it in, watch it land as a chip. End on their use cases. Sources sit in the fine print, offer to send the file."
 ];
 const dotsEl=document.getElementById('dots');
 slides.forEach((_,n)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(n);dotsEl.appendChild(d);});
@@ -593,7 +597,16 @@ function go(n){
   document.getElementById('progress').style.width=((i+1)/slides.length*100)+'%';
   document.getElementById('notes').innerHTML='<b>Slide '+(i+1)+'.</b> '+presNotes[i];
 }
-function next(){go(i+1)} function prev(){go(i-1)}
+function next(){
+  const hidden=[...slides[i].querySelectorAll('.frag')].find(f=>!f.classList.contains('shown'));
+  if(hidden){hidden.classList.add('shown');return;}
+  go(i+1);
+}
+function prev(){
+  const shown=[...slides[i].querySelectorAll('.frag.shown')];
+  if(shown.length){shown[shown.length-1].classList.remove('shown');return;}
+  go(i-1);
+}
 
 function editableEls(){return document.querySelectorAll('.slide h1,.slide h2,.slide h3,.slide p,.slide li,.slide .lead,.slide .chip,.slide figcaption');}
 function setEdit(on){
