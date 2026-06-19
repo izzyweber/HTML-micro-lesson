@@ -191,6 +191,7 @@
     padding:9px 18px;border-radius:999px;font-weight:500;animation:fade .25s ease}
   .turn-chip b{font-weight:700}
   #turnInput::placeholder{color:var(--muted)}
+  .axlab{fill:var(--muted);font-size:12px;text-anchor:middle;font-family:var(--sans)}
   .logo-card{display:flex;flex-direction:column;gap:12px}
   .logo-row{display:flex;align-items:center;gap:14px}
   .logo-row img{height:clamp(34px,3.4vw,46px);width:auto}
@@ -263,14 +264,24 @@
           <div class="if-body">
             <div class="if-pane" data-pane="0">
               <div class="metric-row">
-                <div class="metric"><div class="v">+4.2%</div><div class="l">N. America</div></div>
-                <div class="metric"><div class="v">3</div><div class="l">regions</div></div>
+                <div class="metric"><div class="v">&pound;4.8M</div><div class="l">revenue</div></div>
                 <div class="metric"><div class="v">2.4M</div><div class="l">customers</div></div>
+                <div class="metric"><div class="v">31%</div><div class="l">conversion</div></div>
               </div>
-              <div class="ctrl" style="margin-bottom:0"><label>Forecast growth <b><span id="ifGrowth">4</span>%</b></label>
+              <div class="ctrl" style="margin-bottom:6px"><label>Forecast growth <b><span id="ifGrowth">4</span>%</b></label>
                 <input type="range" id="ifGrowthR" min="0" max="12" value="4" step="1" oninput="ifForecast()"></div>
-              <div class="bar" style="margin-top:10px"><span id="ifBar" style="width:33%"></span></div>
-              <p class="muted small" style="margin:8px 0 0">Projected next quarter <b id="ifProj">2.50M</b> customers</p>
+              <svg viewBox="0 0 360 130" style="width:100%;height:auto;max-height:165px" aria-hidden="true">
+                <line x1="28" y1="110" x2="338" y2="110" stroke="var(--line)" stroke-width="1"/>
+                <polyline points="28,92 105,81 182,70 255,63" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line id="ifProjLine" x1="255" y1="63" x2="332" y2="56" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="3 4" stroke-linecap="round"/>
+                <circle id="ifProjPt" cx="332" cy="56" r="4.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="28" y="125" class="axlab">Q1</text>
+                <text x="105" y="125" class="axlab">Q2</text>
+                <text x="182" y="125" class="axlab">Q3</text>
+                <text x="255" y="125" class="axlab">Q4</text>
+                <text x="332" y="125" class="axlab">Q5</text>
+              </svg>
+              <p class="muted small" style="margin:4px 0 0">Projected next quarter revenue <b id="ifProj">&pound;5.0M</b></p>
             </div>
             <div class="if-pane" data-pane="1" style="display:none">
               <div style="display:flex;flex-direction:column;gap:12px">
@@ -280,12 +291,29 @@
               </div>
             </div>
             <div class="if-pane" data-pane="2" style="display:none">
-              <div style="display:flex;align-items:flex-end;gap:14px;height:130px;padding-top:6px">
-                <div style="flex:1;text-align:center"><div style="height:46px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q1</span></div>
-                <div style="flex:1;text-align:center"><div style="height:64px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q2</span></div>
-                <div style="flex:1;text-align:center"><div style="height:82px;background:var(--accent-soft);border-radius:6px 6px 0 0"></div><span class="muted small">Q3</span></div>
-                <div style="flex:1;text-align:center"><div style="height:100px;background:var(--accent);border-radius:6px 6px 0 0"></div><span class="muted small">Q4</span></div>
+              <div style="display:flex;gap:16px;margin-bottom:4px;font-size:13px">
+                <span style="color:var(--accent);font-weight:600">N. America</span>
+                <span style="color:var(--teal);font-weight:600">Europe</span>
+                <span style="color:var(--coral);font-weight:600">Asia Pacific</span>
               </div>
+              <svg viewBox="0 0 360 148" style="width:100%;height:auto;max-height:180px" aria-hidden="true">
+                <line x1="28" y1="126" x2="340" y2="126" stroke="var(--line)" stroke-width="1"/>
+                <polyline points="28,66 108,58 188,50 255,43" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="255" y1="43" x2="332" y2="33" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="3 4"/>
+                <circle cx="332" cy="33" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <polyline points="28,90 108,86 188,81 255,77" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="255" y1="77" x2="332" y2="71" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="3 4"/>
+                <circle cx="332" cy="71" r="4" fill="var(--surface)" stroke="var(--teal)" stroke-width="2.5"/>
+                <polyline points="28,112 108,109 188,106 255,103" fill="none" stroke="var(--coral)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="255" y1="103" x2="332" y2="99" stroke="var(--coral)" stroke-width="2.5" stroke-dasharray="3 4"/>
+                <circle cx="332" cy="99" r="4" fill="var(--surface)" stroke="var(--coral)" stroke-width="2.5"/>
+                <text x="28" y="142" class="axlab">Q1</text>
+                <text x="108" y="142" class="axlab">Q2</text>
+                <text x="188" y="142" class="axlab">Q3</text>
+                <text x="255" y="142" class="axlab">Q4</text>
+                <text x="332" y="142" class="axlab">Q5</text>
+              </svg>
+              <p class="muted small" style="margin:2px 0 0">Solid is actual, dotted is projected.</p>
             </div>
           </div>
         </div>
@@ -305,7 +333,7 @@
         <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
       </div>
       <div>
-        <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new everything, within reason.</p>
+        <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new <i>everything</i>, within reason.</p>
         <div class="xform">
           <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M12 16v4M8 20h8"/></svg></span><span class="xlabel">Deck</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
           <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span class="xlabel">Memo</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
@@ -319,7 +347,7 @@
 
   <!-- 4 · WHAT IS A .HTML FILE -->
   <section class="slide">
-    <p class="kicker">What a .html file actually is</p>
+    <p class="kicker">What an .html file actually is</p>
     <h2>Three languages, one file, nothing to install.</h2>
     <div class="chips">
       <span class="chip"><b>HTML</b> the words and structure</span>
@@ -335,7 +363,7 @@
 
   <!-- 5 · YOUR DEMO -->
   <section class="slide">
-    <p class="kicker">My example · built in one prompt</p>
+    <p class="kicker">My example</p>
     <h2 style="max-width:24ch">A utilisation model I can change in the room, not a spreadsheet I email round.</h2>
     <div class="cols">
       <div>
@@ -346,7 +374,7 @@
       </div>
       <figure class="figure">
         <img src="assets/utilisation-demo.jpg" alt="Screenshot of the utilisation model" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
-        <div class="ph">Drop your screenshot at <code>assets/utilisation-demo.png</code><span class="small">A still image keeps the slide alive if the live demo will not load.</span></div>
+        <div class="ph">Drop your screenshot at <code>assets/utilisation-demo.jpg</code><span class="small">A still image keeps the slide alive if the live demo will not load.</span></div>
         <figcaption>My utilisation model, running as a single HTML file.</figcaption>
       </figure>
     </div>
@@ -392,7 +420,7 @@
           <p id="verdict" style="margin:14px 0 0">On target.</p>
           <div class="bar" style="margin-top:18px"><span id="utilBar" style="width:75%"></span></div>
         </div>
-        <p class="muted small" style="margin-top:14px">A "show the calculation" panel, a self-check that flags totals that do not add up, and inline sources. That is how it stays defensible across the business.</p>
+        <p class="muted small" style="margin-top:14px">Add a "show the calculation" panel, a self-check that flags totals that do not add up, and inline sources so anyone can verify.</p>
       </div>
     </div>
   </section>
@@ -506,7 +534,6 @@
       </div>
       <div id="turnList" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px"></div>
     </div>
-    <p class="muted small" style="margin-top:30px">And yes, everything you just watched is one HTML file. I will send it to you.</p>
   </section>
 
   <!-- 12 · SOURCES -->
@@ -619,8 +646,11 @@ function ifTab(n){
 function ifForecast(){
   const g=+document.getElementById('ifGrowthR').value;
   document.getElementById('ifGrowth').textContent=g;
-  document.getElementById('ifProj').textContent=(2.4*(1+g/100)).toFixed(2)+'M';
-  document.getElementById('ifBar').style.width=Math.round(g/12*100)+'%';
+  const proj=4.8*(1+g/100);
+  const y=110-(proj-3.5)/2.5*90;
+  document.getElementById('ifProjLine').setAttribute('y2',y.toFixed(1));
+  document.getElementById('ifProjPt').setAttribute('cy',y.toFixed(1));
+  document.getElementById('ifProj').textContent='£'+proj.toFixed(1)+'M';
 }
 function addTurn(){
   const inp=document.getElementById('turnInput'); const v=(inp.value||'').trim(); if(!v)return;
