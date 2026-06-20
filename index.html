@@ -192,6 +192,15 @@
   .turn-chip b{font-weight:700}
   #turnInput::placeholder{color:var(--muted)}
   .axlab{fill:var(--muted);font-size:12px;text-anchor:middle;font-family:var(--sans)}
+  /* ---- kickoff prompt box ---- */
+  .promptbox{border:1.5px solid var(--accent);border-radius:12px;background:var(--surface);overflow:hidden}
+  .promptbox-head{display:flex;align-items:center;justify-content:space-between;background:var(--accent-soft);
+    padding:8px 14px;font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+  .copybtn{font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;
+    border:none;border-radius:7px;padding:5px 13px;text-transform:none;letter-spacing:0}
+  .copybtn:hover{filter:brightness(1.08)}
+  .prompt-text{font-family:var(--mono);font-size:clamp(14px,1.35vw,17px);line-height:1.55;color:var(--ink);
+    padding:16px 18px;white-space:pre-wrap}
   /* ---- click-to-reveal fragments ---- */
   .frag{opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease}
   .frag.shown{opacity:1;transform:none}
@@ -268,6 +277,13 @@
     <div class="cols">
       <div>
         <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
+        <p class="muted small" style="margin:22px 0 8px"><b>Your turn:</b> paste this into your LLM, add a report, and hit go. Leave it running, we'll come back to it.</p>
+        <div class="promptbox">
+          <div class="promptbox-head"><span>Kickoff prompt</span><button class="copybtn" onclick="copyPrompt(this)">Copy</button></div>
+          <div class="prompt-text" id="kickoffPrompt">Turn the report below into a single self-contained, interactive HTML file. One file, opens in any browser, keep all my real content, make the figures explorable, and show the logic behind any numbers.
+
+[paste your report]</div>
+        </div>
       </div>
       <div>
         <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new <i>everything</i>, within reason.</p>
@@ -455,7 +471,7 @@
         <div class="logo-row">
           <img src="assets/claude_logo.svg" alt="Claude" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
           <span class="logo-fallback" style="display:none">Claude</span>
-          <span class="tag" style="margin:0">Anthropic &middot; June 2024</span>
+          <span class="tag" style="margin:0">Anthropic &middot; 18 June 2026</span>
         </div>
         <h3>Artifacts</h3>
         <p>Claude generates an HTML app inside the chat and gives you a share link, often without being asked.</p>
@@ -495,6 +511,11 @@
         </div>
       </div>
     </div>
+    <!--
+      Logo credit: Claude logo, Anthropic, anthropic.com, CC0,
+        https://commons.wikimedia.org/w/index.php?curid=164296390
+    -->
+    <p class="muted" style="position:absolute;left:7vw;right:7vw;bottom:60px;font-size:13px;line-height:1.5;text-align:center">Sources: Thariq Shihipar (@trq212), "HTML is the new markdown" &middot; OpenAI Codex Sites, June 2026 &middot; The AI Daily Brief, Nathaniel Whittemore, June 2026. &nbsp; Claude logo via Wikimedia Commons, CC0.</p>
   </section>
 
   <!-- 10 · QUICK WINS -->
@@ -586,24 +607,10 @@
     </div>
   </section>
 
-  <!-- 11 · INTERACTIVE CLOSER -->
+  <!-- 11 · CLOSE -->
   <section class="slide center">
-    <p class="kicker">Your turn</p>
-    <h2 style="max-width:22ch">What will you turn into an interface first?</h2>
-    <div style="max-width:580px;margin:0 auto;width:100%">
-      <div class="mrow" style="gap:10px;justify-content:center">
-        <input type="text" id="turnInput" placeholder="a report, a tracker, a checklist..." autocomplete="off"
-          style="flex:1;font-size:clamp(18px,1.8vw,22px);padding:13px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)"
-          onkeydown="if(event.key==='Enter'){event.preventDefault();addTurn();}">
-        <button class="btn primary" onclick="addTurn()">Add</button>
-      </div>
-      <div id="turnList" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px"></div>
-    </div>
-    <!--
-      Logo credit: Claude logo, Anthropic, anthropic.com, CC0,
-        https://commons.wikimedia.org/w/index.php?curid=164296390
-    -->
-    <p class="muted" style="position:absolute;left:7vw;right:7vw;bottom:60px;font-size:13px;line-height:1.5;text-align:center">Sources: Thariq Shihipar (@trq212), "HTML is the new markdown" &middot; OpenAI Codex Sites, June 2026 &middot; The AI Daily Brief, Nathaniel Whittemore, June 2026. &nbsp; Claude logo via Wikimedia Commons, CC0.</p>
+    <h1 style="max-width:20ch;margin:0 auto">Now let's take a look at the HTML files you've just generated!</h1>
+    <p class="lead" style="max-width:34ch;margin:22px auto 0">Open the file your LLM made while we were talking.</p>
   </section>
 
 </div>
@@ -622,16 +629,16 @@ const slides=[...document.querySelectorAll('.slide')];
 let i=0, editing=false;
 const presNotes=[
  "Open cold. 'I will teach you something you can use tomorrow, and I will prove the point with the lesson itself.' Do not explain the meta yet. Click once to reveal the '.html file' line, then move on.",
- "The inspiration. Read the quote, then say you tested it and found HTML is the new everything, within reason. The training-materials row is the one that matters for this audience.",
+ "Start the participation bookend here. Have everyone copy the kickoff prompt, paste a report into their own LLM, and hit go, then leave it running. Then read the quote and the transformation list, HTML is the new everything within reason.",
  "Press the button live so they SEE the wall of text collapse into an interface. Click the tabs and drag the forecast slider. This is the interactive spine.",
  "Keep it tight, it is the only how-it-works slide. Cards appear one at a time. Payoff is 'no install, opens anywhere, email the file.'",
  "YOUR demo. Open the live link if wifi allows, fall back to the screenshot if not. Say what you built and why a spreadsheet would not have travelled as well.",
  "Signature move. Click Reveal and let the hidden brief scroll up. 'This was here the whole time, you never saw it. That is how others edit it.' Then mention press E to retype text.",
  "Drag a slider past target, watch it turn coral, then hit Show the calculation. 'It shows its working every time it opens.' Tie to responsible use across the business.",
- "Defuse the hype worry. Two big labs, same idea: Anthropic in 2024, OpenAI in 2026. The direction is the point.",
+ "Defuse the hype worry. Two big labs, same idea, weeks apart in June 2026. The direction is the point. Sources sit in the fine print at the bottom.",
  "Make it concrete for your L and D context. Cards stack up one at a time. The localisation line lands for any multi-market org.",
  "The 'so what'. Once a file is hosted it gets feedback, analytics, and update-once-everywhere. One step from a file to a living tool.",
- "Your turn, and the final slide. Invite them to name a document they would convert, type it in, watch it land as a chip. Sources sit in the fine print, offer to send the file."
+ "Close the bookend. Have everyone open the HTML file their LLM generated while you were talking. That is the payoff, let them react and skim what it built."
 ];
 const dotsEl=document.getElementById('dots');
 slides.forEach((_,n)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(n);dotsEl.appendChild(d);});
@@ -689,7 +696,7 @@ document.addEventListener('keydown',e=>{
   else if(e.key.toLowerCase()==='t'){resetTimer();}
 });
 document.getElementById('deck').addEventListener('click',e=>{
-  if(editing||e.target.closest('button,input,.if-tab,.dot,a,[contenteditable],.figure'))return;
+  if(editing||e.target.closest('button,input,.if-tab,.dot,a,[contenteditable],.figure,.promptbox'))return;
   (e.clientX<innerWidth*0.3)?prev():(e.clientX>innerWidth*0.7?next():null);
 });
 function toggleFull(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();} else {document.exitFullscreen&&document.exitFullscreen();} }
@@ -713,6 +720,11 @@ function ifForecast(){
   document.getElementById('ifProjLine').setAttribute('y2',y.toFixed(1));
   document.getElementById('ifProjPt').setAttribute('cy',y.toFixed(1));
   document.getElementById('ifProj').textContent='£'+proj.toFixed(1)+'M';
+}
+function copyPrompt(btn){
+  const t=document.getElementById('kickoffPrompt').textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(t);
+  const old=btn.textContent; btn.textContent='Copied'; setTimeout(()=>{btn.textContent=old;},1500);
 }
 function addTurn(){
   const inp=document.getElementById('turnInput'); const v=(inp.value||'').trim(); if(!v)return;
