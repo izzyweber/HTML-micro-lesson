@@ -196,12 +196,16 @@
   .frag{opacity:0;transform:translateY(14px);transition:opacity .35s ease,transform .35s ease}
   .frag.shown{opacity:1;transform:none}
   /* ---- slide 9 stacked cards ---- */
-  .stack{position:relative;height:46vh;max-width:560px;margin:10px auto 0;width:100%}
+  .stack{position:relative;height:50vh;max-width:680px;margin:10px auto 0;width:100%}
   .stackcard{position:absolute;left:0;right:0;top:50%;margin:0 auto;width:100%;
-    padding:26px 32px;opacity:0;transform:translate(0,-40%) scale(.94);
+    padding:32px 40px;opacity:0;transform:translate(0,-40%) scale(.94);
     transition:opacity .4s ease,transform .4s ease;box-shadow:0 12px 36px rgba(0,0,0,.10)}
-  .stackcard h3{font-size:clamp(22px,2.3vw,30px)}
-  .stackcard p{font-size:clamp(17px,1.6vw,21px)}
+  .stackcard h3{font-size:clamp(26px,2.8vw,34px)}
+  .stackcard p{font-size:clamp(19px,1.9vw,24px)}
+  .stackcard .mock{font-size:15px}
+  .stackcard .mock-code{font-size:14.5px}
+  .stackcard .mock-step,.stackcard .mock-opt{font-size:15px}
+  .stackcard .mock-pill{font-size:14px}
   .stackcard:nth-child(1){z-index:1}
   .stackcard:nth-child(2){z-index:2}
   .stackcard:nth-child(3){z-index:3}
@@ -255,10 +259,30 @@
   <section class="slide center">
     <h1>HTML as the new file type</h1>
     <p class="lead" style="max-width:30ch;margin:0 auto">...for interactive information sharing</p>
-    <p class="muted small" style="margin-top:38px">Izzy Weber &nbsp;·&nbsp; <span class="mono">this whole deck is one .html file!</span></p>
+    <p class="muted small" style="margin-top:38px">Izzy Weber &nbsp;·&nbsp; <span class="mono frag" style="display:inline-block">this whole deck is an .html file!</span></p>
   </section>
 
-  <!-- 2 · HOOK -->
+  <!-- 2 · VIRAL BLOG POST -->
+  <section class="slide">
+    <p class="kicker">Last month's viral blog post</p>
+    <div class="cols">
+      <div>
+        <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
+      </div>
+      <div>
+        <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new <i>everything</i>, within reason.</p>
+        <div class="xform">
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M12 16v4M8 20h8"/></svg></span><span class="xlabel">Deck</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span class="xlabel">Memo</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.4" fill="var(--surface)"/><circle cx="15" cy="12" r="2.4" fill="var(--surface)"/><circle cx="8" cy="18" r="2.4" fill="var(--surface)"/></svg></span><span class="xlabel">Model</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21v-6M11 21V8M16 21v-9"/></svg></span><span class="xlabel">Dashboard</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v4c0 1 2.5 2 5 2s5-1 5-2v-4"/></svg></span><span class="xlabel">Training materials</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · HOOK -->
   <section class="slide">
     <p class="kicker">Same content, two formats</p>
     <h2 style="max-width:20ch">HTML makes an interactive visual out of any document</h2>
@@ -344,30 +368,10 @@
     </div>
   </section>
 
-  <!-- 3 · THE SHIFT -->
-  <section class="slide">
-    <p class="kicker">Last month's viral blog post</p>
-    <div class="cols">
-      <div>
-        <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
-      </div>
-      <div>
-        <p class="muted" style="margin:0 0 20px">I set out to test whether HTML is the new markdown. It turned out to be the new <i>everything</i>, within reason.</p>
-        <div class="xform">
-          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M12 16v4M8 20h8"/></svg></span><span class="xlabel">Deck</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
-          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span class="xlabel">Memo</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
-          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.4" fill="var(--surface)"/><circle cx="15" cy="12" r="2.4" fill="var(--surface)"/><circle cx="8" cy="18" r="2.4" fill="var(--surface)"/></svg></span><span class="xlabel">Model</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
-          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21v-6M11 21V8M16 21v-9"/></svg></span><span class="xlabel">Dashboard</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
-          <div class="xrow"><span class="xicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v4c0 1 2.5 2 5 2s5-1 5-2v-4"/></svg></span><span class="xlabel">Training materials</span><span class="xarrow">&rarr;</span><span class="xhtml">HTML</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- 4 · WHAT IS A .HTML FILE -->
   <section class="slide">
     <p class="kicker">What an .html file actually is</p>
-    <h2>Three languages, one file, nothing to install.</h2>
+    <h2>Three languages, one file, nothing to install</h2>
     <div class="chips">
       <span class="chip"><b>HTML</b> the words and structure</span>
       <span class="chip"><b>CSS</b> how it looks</span>
@@ -383,13 +387,11 @@
   <!-- 5 · YOUR DEMO -->
   <section class="slide">
     <p class="kicker">My example</p>
-    <h2 style="max-width:24ch">A utilisation model I can change in the room, not a spreadsheet I email round.</h2>
+    <h2 style="max-width:24ch">A utilisation model I can change in the room, not a spreadsheet I email round</h2>
     <div class="cols">
       <div>
         <p>I built this to work out team utilisation. Drag an input and every number updates live.</p>
-        <p>It is one file. I host it and send a link, or send the file itself.</p>
         <a class="btn primary" id="demoLink" href="coach-utilization-model.html" target="_blank" rel="noopener">Open my live utilisation model</a>
-        <p class="muted small" style="margin-top:16px">Opens the full model in a new tab. It travels with this deck.</p>
       </div>
       <figure class="figure">
         <img src="assets/utilisation-demo.jpg" alt="Screenshot of the utilisation model" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
@@ -402,7 +404,7 @@
   <!-- 7 · OBJECTION: EDITING + INVISIBLE CONTEXT -->
   <section class="slide">
     <p class="kicker">Objection · "Nobody else can edit it"</p>
-    <h2>Put the brief inside the file, where no one has to see it.</h2>
+    <h2>Anyone who can chat with an LLM can create or edit an HTML file</h2>
     <div class="cols">
       <div>
         <p>The fear is a black box that only its author can change.</p>
@@ -412,7 +414,7 @@
       </div>
       <div>
         <div class="reveal" id="revBox"></div>
-        <p class="muted small" id="revHint">This deck carries its own brief, audience and sources, written in but never shown. Watch.</p>
+        <p class="muted small" id="revHint">This deck carries its own brief, audience and sources, written in but never shown.</p>
       </div>
     </div>
   </section>
@@ -420,7 +422,7 @@
   <!-- 8 · OBJECTION: TRUST THE MATHS -->
   <section class="slide">
     <p class="kicker">Objection · "I cannot trust the maths"</p>
-    <h2>Make the HTML show its logic.</h2>
+    <h2>Make the HTML show its logic</h2>
     <div class="cols">
       <div>
         <div class="ctrl"><label>Billable hours per week <b><span id="bh">28</span></b></label>
@@ -446,34 +448,51 @@
 
   <!-- 9 · CONVERGENCE -->
   <section class="slide">
-    <p class="kicker">Not one person's opinion</p>
-    <h2>Claude and OpenAI shipped the same idea within weeks.</h2>
+    <p class="kicker">Don't just take my word for it</p>
+    <h2>Anthropic and OpenAI shipped the same idea</h2>
     <div class="cols">
       <div class="card logo-card">
         <div class="logo-row">
           <img src="assets/claude_logo.svg" alt="Claude" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
           <span class="logo-fallback" style="display:none">Claude</span>
-          <span class="tag" style="margin:0">Anthropic</span>
+          <span class="tag" style="margin:0">Anthropic &middot; June 2024</span>
         </div>
         <h3>Artifacts</h3>
         <p>Claude generates an HTML app inside the chat and gives you a share link, often without being asked.</p>
-        <figure class="figure" style="margin-top:2px">
-          <img src="assets/claude-artifact.png" alt="Claude artifact UI" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
-          <div class="ph" style="min-height:13vh">Drop <code>assets/claude-artifact.png</code></div>
-        </figure>
+        <div style="margin-top:10px;display:flex;justify-content:center">
+          <svg viewBox="0 0 200 120" style="width:100%;max-width:230px;height:auto" aria-hidden="true">
+            <rect x="18" y="12" width="164" height="96" rx="9" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+            <line x1="18" y1="34" x2="182" y2="34" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="31" cy="23" r="3" fill="var(--accent)"/><circle cx="43" cy="23" r="3" fill="var(--accent)"/>
+            <rect x="42" y="78" width="15" height="20" rx="2" fill="var(--accent)"/>
+            <rect x="64" y="64" width="15" height="34" rx="2" fill="var(--accent)"/>
+            <rect x="86" y="52" width="15" height="46" rx="2" fill="var(--accent)"/>
+            <line x1="120" y1="52" x2="166" y2="52" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="120" y1="66" x2="158" y2="66" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+            <line x1="120" y1="80" x2="162" y2="80" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+          </svg>
+        </div>
       </div>
       <div class="card logo-card">
         <div class="logo-row">
           <img src="assets/codex_logo.svg" alt="Codex" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
           <span class="logo-fallback" style="display:none">Codex</span>
-          <span class="tag coral" style="margin:0">2 June 2026</span>
+          <span class="tag coral" style="margin:0">OpenAI &middot; 2 June 2026</span>
         </div>
         <h3>Codex Sites</h3>
         <p>Describe it in plain English. Codex builds it, hosts it, and hands back a shareable link with sign-in.</p>
-        <figure class="figure" style="margin-top:2px">
-          <img src="assets/codex-sites.png" alt="Codex Sites UI" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'">
-          <div class="ph" style="min-height:13vh">Drop <code>assets/codex-sites.png</code></div>
-        </figure>
+        <div style="margin-top:10px;display:flex;justify-content:center">
+          <svg viewBox="0 0 200 120" style="width:100%;max-width:230px;height:auto" aria-hidden="true">
+            <rect x="18" y="12" width="164" height="96" rx="9" fill="#faece7" stroke="#993c1d" stroke-width="2"/>
+            <line x1="18" y1="40" x2="182" y2="40" stroke="#993c1d" stroke-width="2"/>
+            <circle cx="31" cy="26" r="3" fill="#993c1d"/><circle cx="43" cy="26" r="3" fill="#993c1d"/>
+            <rect x="56" y="20" width="112" height="13" rx="6.5" fill="var(--surface)" stroke="#993c1d" stroke-width="1.5"/>
+            <circle cx="66" cy="26.5" r="3" fill="none" stroke="#993c1d" stroke-width="1.5"/>
+            <line x1="42" y1="60" x2="120" y2="60" stroke="#993c1d" stroke-width="3" stroke-linecap="round"/>
+            <line x1="42" y1="76" x2="160" y2="76" stroke="#993c1d" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+            <line x1="42" y1="92" x2="138" y2="92" stroke="#993c1d" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
@@ -481,7 +500,7 @@
   <!-- 10 · QUICK WINS -->
   <section class="slide">
     <p class="kicker">Where this earns its keep</p>
-    <h2>Four things we could build for colleagues this month.</h2>
+    <h2>Three things we could build for colleagues this month</h2>
     <div class="stack">
       <div class="card frag stackcard">
         <span class="tag">Enablement</span>
@@ -521,10 +540,19 @@
           <div class="mock-bar"><span style="width:40%"></span></div>
         </div>
       </div>
-      <div class="card frag stackcard">
-        <span class="tag teal">Take it further</span>
-        <h3>Feedback built in</h3>
-        <p style="margin-bottom:10px">A thumbs up or down inside an async training, so you gather data while people learn.</p>
+    </div>
+    <p class="muted" style="margin-top:10px">Each file carries its own context, so translating one into another language is a single prompt.</p>
+  </section>
+
+  <!-- 10 · FROM FILE TO WEBSITE -->
+  <section class="slide">
+    <p class="kicker">From file to website</p>
+    <h2>Building in an .html file is one step away from a hosted website</h2>
+    <div class="cols3">
+      <div class="card frag">
+        <span class="tag teal">Hosted</span>
+        <h3>Gather feedback</h3>
+        <p style="margin-bottom:12px">A thumbs up or down inside an async training, so you gather data while people learn.</p>
         <div class="mock">
           <div style="margin-bottom:8px;font-weight:600">Was this useful?</div>
           <div class="mrow" style="gap:8px;margin-bottom:8px">
@@ -535,8 +563,27 @@
           <div class="mock-bar"><span style="width:82%"></span></div>
         </div>
       </div>
+      <div class="card frag">
+        <span class="tag teal">Hosted</span>
+        <h3>See what gets used</h3>
+        <p style="margin-bottom:12px">Add web analytics and watch which guides colleagues actually open and finish.</p>
+        <div class="mock">
+          <div class="mrow" style="justify-content:space-between;margin-bottom:8px"><span style="font-weight:600">This week</span><span class="muted" style="font-size:13px">1,204 opens</span></div>
+          <svg viewBox="0 0 200 56" style="width:100%;height:auto" aria-hidden="true"><polyline points="6,44 40,36 74,38 108,24 142,20 188,8" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="mrow" style="justify-content:space-between;margin-top:4px"><span class="muted" style="font-size:12px">Mon</span><span class="muted" style="font-size:12px">Sun</span></div>
+        </div>
+      </div>
+      <div class="card frag">
+        <span class="tag teal">Hosted</span>
+        <h3>Update once, everywhere</h3>
+        <p style="margin-bottom:12px">Fix the hosted version and everyone gets it. No hunting down old PDFs or stale guidance.</p>
+        <div class="mock">
+          <div class="mock-step"><span class="mock-dot done">&#10003;</span> v2 &middot; published today</div>
+          <div class="mock-step" style="opacity:.55"><span class="mock-dot" style="font-size:10px">v1</span> <span style="text-decoration:line-through">old guidance</span></div>
+          <span class="mock-btn" style="margin-top:4px">Everyone sees v2</span>
+        </div>
+      </div>
     </div>
-    <p class="muted" style="margin-top:10px">Each file carries its own context, so translating one into another language is a single prompt.</p>
   </section>
 
   <!-- 11 · INTERACTIVE CLOSER -->
@@ -574,16 +621,17 @@
 const slides=[...document.querySelectorAll('.slide')];
 let i=0, editing=false;
 const presNotes=[
- "Open cold. 'I will teach you something you can use tomorrow, and I will prove the point with the lesson itself.' Do not explain the meta yet. Let it land at the very end.",
- "Press the button live so they SEE the wall of text collapse into an interface. Then put the question to them and wait for a real answer. This is the interactive spine.",
- "Read the quote, then translate it into plain terms for your audience. Put the strategy question to the most senior person and give them room. The training-materials line is the one that matters.",
- "Keep it tight, it is the only how-it-works slide. Payoff is 'no install, opens anywhere, email the file.' Ask the room where that removes friction. Someone will have a concrete answer.",
+ "Open cold. 'I will teach you something you can use tomorrow, and I will prove the point with the lesson itself.' Do not explain the meta yet. Click once to reveal the '.html file' line, then move on.",
+ "The inspiration. Read the quote, then say you tested it and found HTML is the new everything, within reason. The training-materials row is the one that matters for this audience.",
+ "Press the button live so they SEE the wall of text collapse into an interface. Click the tabs and drag the forecast slider. This is the interactive spine.",
+ "Keep it tight, it is the only how-it-works slide. Cards appear one at a time. Payoff is 'no install, opens anywhere, email the file.'",
  "YOUR demo. Open the live link if wifi allows, fall back to the screenshot if not. Say what you built and why a spreadsheet would not have travelled as well.",
- "Signature move. Click Reveal and let the hidden brief scroll up. 'This was here the whole time, you never saw it. That is how others edit it.' Then mention press E to retype text. Slow down here.",
+ "Signature move. Click Reveal and let the hidden brief scroll up. 'This was here the whole time, you never saw it. That is how others edit it.' Then mention press E to retype text.",
  "Drag a slider past target, watch it turn coral, then hit Show the calculation. 'It shows its working every time it opens.' Tie to responsible use across the business.",
- "Defuse the hype worry. Two competitors, same idea, same month. One calm line, do not oversell.",
- "Make it concrete for your L and D context. The localisation line lands for any multi-market org, the file carries its own context so translation is one prompt.",
- "Your turn, and the final slide. Invite them to name a document they would convert, type it in, watch it land as a chip. End on their use cases. Sources sit in the fine print, offer to send the file."
+ "Defuse the hype worry. Two big labs, same idea: Anthropic in 2024, OpenAI in 2026. The direction is the point.",
+ "Make it concrete for your L and D context. Cards stack up one at a time. The localisation line lands for any multi-market org.",
+ "The 'so what'. Once a file is hosted it gets feedback, analytics, and update-once-everywhere. One step from a file to a living tool.",
+ "Your turn, and the final slide. Invite them to name a document they would convert, type it in, watch it land as a chip. Sources sit in the fine print, offer to send the file."
 ];
 const dotsEl=document.getElementById('dots');
 slides.forEach((_,n)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(n);dotsEl.appendChild(d);});
