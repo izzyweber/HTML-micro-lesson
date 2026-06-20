@@ -277,7 +277,7 @@
     <div class="cols">
       <div>
         <p class="quote">"HTML is the new markdown."<span class="by">Thariq Shihipar, Claude Code lead at Anthropic. The post has about 8 million views.</span></p>
-        <p class="muted small" style="margin:22px 0 8px"><b>Your turn:</b> paste this into your LLM, add a report, and hit go. Leave it running, we'll come back to it.</p>
+        <p class="muted small" style="margin:22px 0 8px"><b>Your turn:</b> paste this into your LLM, add a report, and hit go. Leave it running; we'll come back to it.</p>
         <div class="promptbox">
           <div class="promptbox-head"><span>Kickoff prompt</span><button class="copybtn" onclick="copyPrompt(this)">Copy</button></div>
           <div class="prompt-text" id="kickoffPrompt">Turn the report below into a single self-contained, interactive HTML file. One file, opens in any browser, keep all my real content, make the figures explorable, and show the logic behind any numbers.
@@ -406,7 +406,7 @@
     <h2 style="max-width:24ch">A utilisation model I can change in the room, not a spreadsheet I email round</h2>
     <div class="cols">
       <div>
-        <p>I built this to work out team utilisation. Drag an input and every number updates live.</p>
+        <p>I built this to work out team utilisation. Toggle an input and every number updates live.</p>
         <a class="btn primary" id="demoLink" href="coach-utilization-model.html" target="_blank" rel="noopener">Open my live utilisation model</a>
       </div>
       <figure class="figure">
@@ -425,8 +425,8 @@
       <div>
         <p>The fear is a black box that only its author can change.</p>
         <p>The fix is to write the brief, the assumptions and the sources into the file, invisible to viewers but read instantly by the next person or the next AI.</p>
-        <p class="muted">Then editing is simple. Open it in any text editor, or hand it back to your favourite LLM and say what to change. You can even retype the words right here. Press <b>E</b>.</p>
         <button class="btn primary" onclick="reveal()" id="revBtn">Reveal the hidden context in this file</button>
+        <p class="muted" style="margin-top:18px">Then editing is simple. Open it in any text editor, or hand it back to your favourite LLM and say what to change. You can even retype the words right here. Press <b>E</b>.</p>
       </div>
       <div>
         <div class="reveal" id="revBox"></div>
@@ -474,7 +474,7 @@
           <span class="tag" style="margin:0">Anthropic &middot; 18 June 2026</span>
         </div>
         <h3>Artifacts</h3>
-        <p>Claude generates an HTML app inside the chat and gives you a share link, often without being asked.</p>
+        <p>Claude Code now has the ability to share output to live, interactive pages at a private URL.</p>
         <div style="margin-top:10px;display:flex;justify-content:center">
           <svg viewBox="0 0 200 120" style="width:100%;max-width:230px;height:auto" aria-hidden="true">
             <rect x="18" y="12" width="164" height="96" rx="9" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
@@ -609,7 +609,8 @@
 
   <!-- 11 · CLOSE -->
   <section class="slide center">
-    <h1 style="max-width:20ch;margin:0 auto">Now let's take a look at the HTML files you've just generated!</h1>
+    <p class="kicker">Now it's your turn</p>
+    <h1 style="max-width:20ch;margin:0 auto;color:var(--ink)">Let's take a look at the HTML files you've just generated!</h1>
     <p class="lead" style="max-width:34ch;margin:22px auto 0">Open the file your LLM made while we were talking.</p>
   </section>
 
